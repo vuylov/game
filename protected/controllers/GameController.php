@@ -66,14 +66,13 @@ class GameController extends SecureController
         
         public function actionNext()
         {
+            $this->disableJSScript();
             $game       = Yii::app()->user->getState('currentGameId');
             //Choose last step in current game
             $lastStep   = Yii::app()->user->getState('lastStep'); 
             
-            //check assets list for process finance tools
             
-            
-            //Change parameters of step
+            //Create new stepp of game progress and fill with paramters
             $newStep = new Progress();
             $newStep->step      = $lastStep->step + 1;
             $newStep->deposit   = $lastStep->deposit + Yii::app()->params['income'];
@@ -83,24 +82,37 @@ class GameController extends SecureController
             {
                 var_dump($newStep->getErrors());
             }
-            //var_dump($newStep);
-            // echo $step->value;
-            Yii::app()->clientscript->scriptMap['jquery.js'] = false;
-            Yii::app()->clientscript->scriptMap['jquery.ui.js'] = false;
-            Yii::app()->clientscript->scriptMap['jquery-ui.min.js'] = false;
-   
+            
+            //check assets list for process finance tools
+            $this->checkAssetList($newStep);
+            //store new step in user session
             Yii::app()->user->setState('lastStep', $newStep);
-            
-            
+
             $response = $this->renderPartial('play', array('step'=>$newStep), true, true);
             echo $response;
+        }
+
+        public function checkAssetList(Progress $progress)
+        {
+            $assets     = Asset::model()->with('tool')->findAllByAttributes(array('game_id'=> $progress->game_id));
+            foreach ($assets as $asset)
+            {
+                $tool       = ToolFactory::getTool($asset->tool_id);
+                if($progress->step == $asset->step_end)
+                {
+                    $tool->endProcess($progress, $asset);
+                }
+                else
+                {
+                    $tool->stepProcess($progress, $asset);
+                }
+            }
+
         }
         
         public function actionShop()
         {
-            Yii::app()->clientscript->scriptMap['jquery.js'] = false;
-            Yii::app()->clientscript->scriptMap['jquery.ui.js'] = false;
-            Yii::app()->clientscript->scriptMap['jquery-ui.min.js'] = false;
+            $this->disableJSScript();
             $worthes = Worth::model()->findAll();
             $response = $this->renderPartial('shop', array('worthes'=> $worthes), true, true);
             echo $response;
@@ -108,13 +120,9 @@ class GameController extends SecureController
         
         public function actionBuy($id)
         {
+            $this->disableJSScript();
             $step = Yii::app()->user->getState('lastStep');
             $game = Yii::app()->user->getState('currentGameId');
-            
-            Yii::app()->clientscript->scriptMap['jquery.js'] = false;
-            Yii::app()->clientscript->scriptMap['jquery.ui.js'] = false;
-            Yii::app()->clientscript->scriptMap['jquery-ui.min.js'] = false;
-            
             //логируем запись о покупке
             $action = new Action;
             $action->actiontype_id = 1;
@@ -147,12 +155,9 @@ class GameController extends SecureController
         
         public function actionSell($id)
         {
+            $this->disableJSScript();
             $step = Yii::app()->user->getState('lastStep');
             $game = Yii::app()->user->getState('currentGameId');
-            Yii::app()->clientscript->scriptMap['jquery.js'] = false;
-            Yii::app()->clientscript->scriptMap['jquery.ui.js'] = false;
-            Yii::app()->clientscript->scriptMap['jquery-ui.min.js'] = false;
-            
             
             $action = Action::model()->with('worth')->findByPk($id);
             $action->status = 's';
@@ -173,11 +178,9 @@ class GameController extends SecureController
         
         public function actionWorthView($id)
         {
+            $this->disableJSScript();
             $step = Yii::app()->user->getState('lastStep');
             $game = Yii::app()->user->getState('currentGameId');
-            Yii::app()->clientscript->scriptMap['jquery.js'] = false;
-            Yii::app()->clientscript->scriptMap['jquery.ui.js'] = false;
-            Yii::app()->clientscript->scriptMap['jquery-ui.min.js'] = false;
             
             $action = Action::model()->with('worth')->findByPk($id);
             
@@ -185,32 +188,11 @@ class GameController extends SecureController
             echo $response;
         }
         
+        private function disableJSScript()
+        {
+            Yii::app()->clientscript->scriptMap['jquery.js'] = false;
+            Yii::app()->clientscript->scriptMap['jquery.ui.js'] = false;
+            Yii::app()->clientscript->scriptMap['jquery-ui.min.js'] = false;
+        }
         
-        
-        // Uncomment the following methods and override them if needed
-	/*
-	public function filters()
-	{
-		// return the filter configuration for this controller, e.g.:
-		return array(
-			'inlineFilterName',
-			array(
-				'class'=>'path.to.FilterClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-
-	public function actions()
-	{
-		// return external action classes, e.g.:
-		return array(
-			'action1'=>'path.to.ActionClass',
-			'action2'=>array(
-				'class'=>'path.to.AnotherActionClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-	*/
 }

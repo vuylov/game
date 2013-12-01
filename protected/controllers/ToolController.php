@@ -22,71 +22,26 @@ class ToolController extends SecureController
         {
             $tool       = Tool::model()->findByPk($id);
             $step       = Yii::app()->user->getState('lastStep');
-            switch ($tool->type) {
-                case 'd':
-                    $response = $this->renderPartial('deposit/index', array('tool' => $tool, 'step' => $step), true, true);
-                    echo $response;
-                    break;
-                case 'c':
-                    echo 'Это занимаем денюфки';
-                    break;
-                default:
-                    echo 'Хз xnj это';
-                    break;
-            }
+            $response = $this->renderPartial($tool->class.'/index', array('tool' => $tool, 'step' => $step), true, true);
+            echo $response;
         }
         
         public function actionProcess()
         {
             
             $step       = Yii::app()->user->getState('lastStep');
-            $toolId     = Yii::app()->request->getPost('tool');
-            $quanStep        = Yii::app()->request->getPost('step');
-            $deposit    = Yii::app()->request->getPost('deposit');
+            $formData   = Yii::app()->request->getPost('Tool');
             
-            $asset      = new Asset;
-            $asset->progress_id = $step->id;
-            $asset->game_id     = $step->game_id;
-            $asset->tool_id     = $toolId;
-            $asset->step_start  = $step->step;
-            $asset->step_end    = (int)$step->step + (int)$quanStep;
-            $asset->balance     = $deposit;
-            
-            if(!$asset->save())
-            {
-                echo CVarDumper::dump($asset->getErrors(), 10, true);
-            }
-            else
-            {
-                echo 'Модель сохранена';
-            }
-            //echo $toolId;
+            //get proper tool class with class factory
+            $tool           = ToolFactory::getTool($formData['id']);
+            //instantiate asset and save it
+            $tool->instantiateAsset($step, $formData);
+            //change deposit in current progress of user
+            $tool->startProcess($step);
+
+            $step->save();
+            Yii::app()->user->setState('lastStep', $step);
+            $response = $this->renderPartial('//game/play', array('step'=>$step), true, true);
+            echo $response;
         }
-
-	// Uncomment the following methods and override them if needed
-	/*
-	public function filters()
-	{
-		// return the filter configuration for this controller, e.g.:
-		return array(
-			'inlineFilterName',
-			array(
-				'class'=>'path.to.FilterClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-
-	public function actions()
-	{
-		// return external action classes, e.g.:
-		return array(
-			'action1'=>'path.to.ActionClass',
-			'action2'=>array(
-				'class'=>'path.to.AnotherActionClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-	*/
 }

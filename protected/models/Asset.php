@@ -18,6 +18,13 @@
  */
 class Asset extends CActiveRecord
 {
+	//merge with open status rows parameter
+	public function defaultScope()
+	{
+		return array(
+	        'condition'=>"status = 'o'", 
+	    );
+	}
 	/**
 	 * @return string the associated database table name
 	 */
@@ -34,7 +41,7 @@ class Asset extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('progress_id, tool_id, step_start, step_end, balance', 'required'),
+			array('progress_id, tool_id, step_start, step_end', 'required'),
 			array('progress_id, tool_id, course_id, step_start, step_end', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

@@ -1,15 +1,15 @@
 <div class="form-process">
 <?php echo CHtml::beginForm('', 'post', array('id'=>'dep_')); ?>
     <div class="row">
-        <?php echo CHtml::label('Укажите сумму для депозита', 'deposit'); ?>
-        <?php echo CHtml::textField('Tool[money]', $tool->in_total_min, array('id' => 'deposit')); ?>
+        <?php echo CHtml::label('Укажите сумму кредита', 'credit'); ?>
+        <?php echo CHtml::textField('Tool[money]', $tool->in_total_min, array('id' => 'credit')); ?>
     </div>
     <div class="row">
-        <?php echo CHtml::label('Укажите срок депозита (минимальный срок 12 шагов)', 'step'); ?>
+        <?php echo CHtml::label('Укажите срок кредита (минимальный срок 12 шагов)', 'step'); ?>
         <?php echo CHtml::textField('Tool[steps]', $tool->step_min, array('id' => 'step')); ?>
     </div>
     <div class="row">
-        <?php echo CHtml::ajaxLink('Положить деньги',
+        <?php echo CHtml::ajaxLink('Взять кредит',
                 Yii::app()->createUrl('tool/process'),
                 array(
                     'type' => 'POST',
