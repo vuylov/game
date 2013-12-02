@@ -21,7 +21,7 @@ class ConsumerCredit{
             $this->asset->step_start      = $progress->step;
             $this->asset->step_end        = $this->asset->step_start + $formData['steps'];
             $this->asset->balance_start   = $formData['money'];
-            $this->asset->balance_end     = $formData['money'];
+            $this->asset->balance_end     = round($this->annuitetPayment($this->procent, $formData['steps']) * $this->asset->balance_start * $formData['steps']);
 
             if(!$this->asset->save() && defined('YII_DEBUG'))
             {
@@ -37,11 +37,8 @@ class ConsumerCredit{
 
 	public function stepProcess(Progress $progress, Asset $asset)
 	{
-		$monthProcent 	= $this->procent / 12;
-		$interval		= $asset->step_end - $asset->step_start;
-		//$delta = ($asset->balance_start * $monthProcent) / (1 - (1/(bcpow(1 + $monthProcent, $interval, 2))));
-		$K          =   ($monthProcent*(bcpow(1 + $monthProcent, $interval, 4))) / (bcpow(1+$monthProcent, $interval, 4) - 1);
-                $delta      = $K * $asset->balance_start;          
+		$interval   = $asset->step_end - $asset->step_start;
+		$delta      = $this->annuitetPayment($this->procent, $interval) * $asset->balance_start;          
 		$asset->balance_end -= $delta;
 		$asset->save();
 
@@ -56,4 +53,11 @@ class ConsumerCredit{
 		$asset->status = 'c';
 		$asset->save();
 	}
+        
+        public function annuitetPayment($procent, $interval)
+        {
+            $monthProcent   = $procent / 12;
+            $K              =   ($monthProcent*(bcpow(1 + $monthProcent, $interval, 4))) / (bcpow(1+$monthProcent, $interval, 4) - 1);
+            return $K;
+        }
 }
