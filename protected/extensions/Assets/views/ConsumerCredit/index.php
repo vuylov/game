@@ -1,4 +1,13 @@
-<b><?php echo $asset->tool->name; ?></b>. Процетная ставка: 
+<b>
+    <?php 
+        echo CHtml::ajaxLink(
+                $asset->tool->name, 
+                Yii::app()->createUrl('asset/view', array('id' => $asset->id)), 
+                array('success' => 'function(response){$("#shopDialog").html(response).dialog("open"); return false;}'),
+                array('id'=>mt_rand(1, 9999)));
+    ?>
+</b>
+. Процетная ставка: 
 	<?php 
 		$procent = $asset->tool->in_step_min*100; 
 		echo $procent.'%';

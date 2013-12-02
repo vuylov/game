@@ -7,10 +7,15 @@ class ConsumerCredit{
 
 	public function __construct(Tool $tool)
 	{
-		$this->id	   	= $tool->id;
+		$this->id	= $tool->id;
 		$this->procent 	= $tool->in_step_min;
 		$this->money 	= $tool->in_total_max;
 	}
+        
+        public function getProcent()
+        {
+            return $this->procent;
+        }
 
 	public function instantiateAsset(Progress $progress, array $formData)
 	{
@@ -28,8 +33,13 @@ class ConsumerCredit{
                     CVarDumper::dump($this->asset->getErrors(), 10, true);
             }
 	}
+        
+        public function setAsset(Asset $asset)
+        {
+            $this->asset = $asset;
+        }
 
-	public function startProcess(Progress $progress)
+        public function startProcess(Progress $progress)
 	{
 		$progress->deposit = $progress->deposit + $this->asset->balance_start;    
                 $progress->save();
@@ -59,5 +69,28 @@ class ConsumerCredit{
             $monthProcent   = $procent / 12;
             $K              =   ($monthProcent*(bcpow(1 + $monthProcent, $interval, 4))) / (bcpow(1+$monthProcent, $interval, 4) - 1);
             return $K;
+        }
+        
+        public function monthPayment($procent, $interval, $credit)
+        {
+            return round($this->annuitetPayment($procent, $interval) * $credit);
+        }
+
+
+        public function closeCredit(Progress $progress, Asset $asset)
+        {
+            if($progress->deposit > $asset->balance_end)
+            {
+                $progress->deposit -= $asset->balance_end;
+                $progress->save();
+                
+                $asset->status = 'c';
+                $asset->save();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 }

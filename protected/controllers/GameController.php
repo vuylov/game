@@ -3,6 +3,13 @@
 class GameController extends SecureController
 {
         
+        public function actionReload()
+        {
+            $progress = Yii::app()->user->getState('lastStep');
+            $response = $this->renderPartial('play', array('step'=>$progress), true, true);
+            echo $response;
+        }
+        
         public function actionIndex()
 	{
 		$this->render('index');
