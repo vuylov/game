@@ -13,7 +13,7 @@
 		echo $procent.'%';
 	?>
  Сумма кредита: <?php echo $asset->balance_start; ?>
- Осталось погасить: <?php echo $asset->balance_end; ?> за 
+ Осталось погасить: <?php echo round($asset->balance_end); ?> за 
  <?php
  	$elapsedSteps = $asset->step_end - $step->step;
  		echo $elapsedSteps;

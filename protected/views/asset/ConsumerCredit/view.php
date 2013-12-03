@@ -11,7 +11,7 @@
     Сумма кредита: <?php echo $asset->balance_start; ?>
 </div>
 <div class="row">
-    Остаток для погашения: <?php echo $asset->balance_end; ?>
+    Остаток для погашения: <?php echo round($asset->balance_end); ?>
 </div>
 <div class="row">
     Срок погашения: <?php $elapsedSteps =  $asset->step_end - $progress->step;
@@ -24,6 +24,7 @@
         ?>
 </div>
 <div class="row">
+    <hr>
     <?php
         echo CHtml::ajaxLink(
                 'Погасить досрочно', 

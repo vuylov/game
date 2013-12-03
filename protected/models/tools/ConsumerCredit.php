@@ -81,7 +81,7 @@ class ConsumerCredit{
         {
             if($progress->deposit > $asset->balance_end)
             {
-                $progress->deposit -= $asset->balance_end;
+                $progress->deposit -= round($asset->balance_end);
                 $progress->save();
                 
                 $asset->status = 'c';
