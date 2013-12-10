@@ -23,6 +23,7 @@ class Deposit {
         $this->asset->step_end        = $this->asset->step_start + $formData['steps'];
         $this->asset->balance_start   = $formData['money'];
         $this->asset->balance_end     = $formData['money'];
+        $this->asset->number          = 1;
         
         if(!$this->asset->save() && defined('YII_DEBUG'))
         {
