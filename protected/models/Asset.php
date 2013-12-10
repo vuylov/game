@@ -42,10 +42,10 @@ class Asset extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('progress_id, tool_id, step_start, step_end', 'required'),
-			array('progress_id, tool_id, course_id, step_start, step_end', 'numerical', 'integerOnly'=>true),
+			array('progress_id, tool_id, step_start, step_end', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, progress_id, tool_id, course_id, step_start, step_end', 'safe', 'on'=>'search'),
+			array('id, progress_id, tool_id, step_start, step_end', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,7 +57,6 @@ class Asset extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'course' => array(self::BELONGS_TO, 'Currentcourse', 'course_id'),
 			'progress' => array(self::BELONGS_TO, 'Progress', 'progress_id'),
 			'tool' => array(self::BELONGS_TO, 'Tool', 'tool_id'),
                         'game' => array(self::BELONGS_TO, 'Game', 'game_id'),
@@ -73,7 +72,6 @@ class Asset extends CActiveRecord
 			'id' => 'ID',
 			'progress_id' => 'Progress',
 			'tool_id' => 'Tool',
-			'course_id' => 'Course',
 			'step_start' => 'Step Start',
 			'step_end' => 'Step End',
 		);
@@ -100,7 +98,6 @@ class Asset extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('progress_id',$this->progress_id);
 		$criteria->compare('tool_id',$this->tool_id);
-		$criteria->compare('course_id',$this->course_id);
 		$criteria->compare('step_start',$this->step_start);
 		$criteria->compare('step_end',$this->step_end);
 

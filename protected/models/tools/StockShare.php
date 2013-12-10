@@ -24,8 +24,8 @@ class StockShare {
         $this->asset->tool_id         = $this->id;
         $this->asset->step_start      = $progress->step;
         $this->asset->step_end        = 0;// this for tools without end action
-        $this->asset->balance_start   = $formData['number'];
-        $this->asset->balance_end     = $formData['money'];
+        $this->asset->balance_start   = $this->number * ShareRateManager::getLastRate($this->id, $progress);
+        $this->asset->balance_end     = $this->asset->balance_start;
         $this->asset->number          = $this->number;
         
         if(!$this->asset->save() && defined('YII_DEBUG'))
@@ -42,8 +42,7 @@ class StockShare {
    
    public function stepProcess(Progress $progress, Asset $asset)
    {
-       $delta               = ($asset->balance_end * $this->procent)/12; //formula
-       $asset->balance_end += $delta;
+       $asset->balance_end = $asset->number * ShareRateManager::getLastRate($asset->tool_id, $progress);
        $asset->save();
    }
 

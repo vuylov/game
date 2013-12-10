@@ -33,17 +33,16 @@ class ShareRateManager {
      * @param Progress $progress current game step
      * @return int rate value
      */
-    static public function getLastRate(Tool $tool, Progress $progress)
+    static public function getLastRate($toolId, Progress $progress)
     {
         $rate = ShareRate::model()->findAll(array(
             'select'    => 't.id, t.tool_id, t.progress_id, t.game_id, t.value',
-            'condition' => 't.toold_id = :tool and t.game_id = :game',
+            'condition' => 't.tool_id = :tool and t.game_id = :game',
             'order'     => 't.progress_id DESC',
             'limit'     => '1',
-            'params'    => array('tool' => $tool->id, 'game' => $progress->game_id)
+            'params'    => array('tool' => $toolId, 'game' => $progress->game_id)
         ));
-        
-        return $rate->value;
+        return $rate[0]->value;
     }
     /*
      * Generate new rate value.
