@@ -90,6 +90,9 @@ class GameController extends SecureController
                 var_dump($newStep->getErrors());
             }
             
+            //generate rates for financinal tools
+            ShareRateManager::newRates($newStep);
+            
             //check assets list for process finance tools
             $this->checkAssetList($newStep);
             //store new step in user session

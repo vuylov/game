@@ -25,7 +25,7 @@ return array(
 			'class'=>'system.gii.GiiModule',
 			'password'=>'12345',
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
-			'ipFilters'=>array('10.10.3.185','::1'),
+			//'ipFilters'=>array('10.10.3.185','::1'),
 		),
 	),
 
