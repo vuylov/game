@@ -65,6 +65,12 @@ class ConsumerCredit{
 		$asset->save();
 	}
         
+        /*
+         * Formula for calculate coefficient of annuity payment
+         * @param float $procent current procent rate
+         * @param int $interval total credit monthes
+         * return float $K coefficient of annuity payment
+         */
         public function annuitetPayment($procent, $interval)
         {
             $monthProcent   = $procent / 12;
@@ -72,12 +78,25 @@ class ConsumerCredit{
             return $K;
         }
         
+        /*
+         * Calculate month payment of credit based on procent, time interval
+         * and amount money.
+         * @param float $procent procent rate of credit
+         * @param int $interval total credit monthes
+         * @param int $credit total amount credit
+         * @return int month payment
+         */
         public function monthPayment($procent, $interval, $credit)
         {
             return round($this->annuitetPayment($procent, $interval) * $credit);
         }
 
-
+        /*
+         * Close credit payments earlier if enough money
+         * @param Progress $progress current step of game
+         * @param Asset $asset current asset of user
+         * @return boolean TRUE/FALSE
+         */
         public function closeCredit(Progress $progress, Asset $asset)
         {
             if($progress->deposit > $asset->balance_end)
