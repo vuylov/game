@@ -21,9 +21,10 @@ class StockShare {
         $existAsset = Asset::model()->findByAttributes(array('tool_id' => $this->id));
         if($existAsset)
         {
-            $existAsset->balance_end    += $this->number * ShareRateManager::getLastRate($this->id, $progress);
-            $existAsset->number         += $this->number;
-            if($existAsset->save())
+            $this->asset = $existAsset;
+            $this->asset->balance_end       += $this->number * ShareRateManager::getLastRate($this->id, $progress);
+            $this->asset->number         += $this->number;
+            if($this->asset->save())
             {
                 $shareStore                 = new ShareStore;
                 $shareStore->tool_id        = $this->id;
@@ -68,6 +69,10 @@ class StockShare {
             }
         }
     }
+   public function setAsset(Asset $asset)
+   {
+       $this->asset = $asset;
+   }
     
    public function startProcess(Progress $progress)
    {
@@ -83,14 +88,38 @@ class StockShare {
 
    public function endProcess(Progress $progress, Asset $asset)
    {
-        /*
-        //calculate last step
-        $this->stepProcess($progress, $asset);
-        //change state of current step
-        $progress->deposit += floor($asset->balance_end);
+        
         $progress->save();
-        //close asset with status 'c - close'
+        
         $asset->status = 'c';
-        $asset->save();*/
+        $asset->save();
+   }
+   
+   public function sellShare(Asset $asset, Progress $progress, $number)
+   {
+       $price   = ShareRateManager::getLastRate($asset->tool_id, $progress);
+       $total   = $number * $price;
+       
+       $progress->deposit   += $total;
+       
+       
+       $asset->number       -= $number;
+       $asset->balance_end  -= $total;
+       
+       //log sell process
+       $shareStore                  = new ShareStore;
+       $shareStore->tool_id         = $asset->tool_id;
+       $shareStore->progress_id     = $progress->id;
+       $shareStore->game_id         = $progress->game_id;
+       $shareStore->step            = $progress->step;
+       $shareStore->number          = $number;
+       $shareStore->price           = $price;
+       $shareStore->total           = $total;
+       $shareStore->type            = 's';
+       $shareStore->save();
+       
+       if($asset->save() && $progress->save())
+           return TRUE;
+       return FALSE;
    }
 }

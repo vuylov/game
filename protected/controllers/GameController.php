@@ -117,7 +117,6 @@ class GameController extends SecureController
                     $tool->stepProcess($progress, $asset);
                 }
             }
-
         }
         
         public function actionShop()
