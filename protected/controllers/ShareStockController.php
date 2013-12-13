@@ -39,12 +39,19 @@ class ShareStockController extends SecureController{
         elseif($asset->number == $formData['number'])
         {
             $stockShare->endProcess($progress, $asset);
+            $msg = 'Все акции проданы';
+            $response = $this->renderPartial('msg', array('msg' =>$msg), true, true);
+            echo $response;
+            Yii::app()->end();
         }
         else
         {
             if($stockShare->sellShare($asset, $progress, $formData['number']))
             {
-                echo 'Проданы';
+                $msg = $formData['number'].' ценных бумаг продано';
+                $response = $this->renderPartial('msg', array('msg' =>$msg), true, true);
+                echo $response;
+                Yii::app()->end();
             }
         }
     }

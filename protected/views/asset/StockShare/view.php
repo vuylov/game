@@ -22,7 +22,7 @@
                 array(
                     'type' => 'POST',
                     'data' => 'js:$("#stocShare").serialize()',
-                    'success' => 'function(response){$("#shopDialog").dialog("close").dialog("destroy");$("#game-content").html(response);}',
+                    'success' => 'function(response){$("#shopDialog").html(response); return false;}',
                 ),
                 array('id' => mt_rand(1, 9999))); ?>
         <?php echo CHtml::link('Отмена', '#', array(

@@ -88,17 +88,29 @@ class StockShare {
 
    public function endProcess(Progress $progress, Asset $asset)
    {
-        
-        $progress->save();
-        
+       $price               =  ShareRateManager::getLastRate($asset->tool_id, $progress);
+       $total               = $asset->number * $price;
+       
+       //logging selling process
+       $this->logShareStore($progress, $asset, $asset->number, 's');
+       
+       $progress->deposit   += $total;
+       $progress->save();
+       
+        //$asset->number       = 0;
+        //$asset->balance_end -= $total;
+        $asset->step_end    = $progress->step;
         $asset->status = 'c';
         $asset->save();
+        
    }
    
    public function sellShare(Asset $asset, Progress $progress, $number)
    {
        $price   = ShareRateManager::getLastRate($asset->tool_id, $progress);
        $total   = $number * $price;
+       //logging selling process
+       $this->logShareStore($progress, $asset, $number, 's');
        
        $progress->deposit   += $total;
        
@@ -106,7 +118,16 @@ class StockShare {
        $asset->number       -= $number;
        $asset->balance_end  -= $total;
        
-       //log sell process
+       if($asset->save() && $progress->save())
+           return TRUE;
+       return FALSE;
+   }
+   
+   private function logShareStore(Progress $progress, Asset $asset, $number, $status)
+   {
+       $price   = ShareRateManager::getLastRate($asset->tool_id, $progress);
+       $total   = $number * $price;
+       
        $shareStore                  = new ShareStore;
        $shareStore->tool_id         = $asset->tool_id;
        $shareStore->progress_id     = $progress->id;
@@ -115,10 +136,8 @@ class StockShare {
        $shareStore->number          = $number;
        $shareStore->price           = $price;
        $shareStore->total           = $total;
-       $shareStore->type            = 's';
-       $shareStore->save();
-       
-       if($asset->save() && $progress->save())
+       $shareStore->type            = $status;
+       if($shareStore->save())
            return TRUE;
        return FALSE;
    }
