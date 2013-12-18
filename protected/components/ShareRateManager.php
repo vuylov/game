@@ -18,9 +18,9 @@ class ShareRateManager {
                 $rate->progress_id  = $progress->id;
                 $rate->game_id      = $progress->game_id;
                 $rate->value        = self::generateRate($tool);
-                
-                return ($rate->save())?TRUE:FALSE;
+                $rate->save();
             }
+            return ($rate->getErrors() === NULL)?TRUE:FALSE;
         }
         else
         {
