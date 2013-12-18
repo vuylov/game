@@ -1,6 +1,10 @@
 <div class="form-process">
 <?php echo CHtml::beginForm('', 'post', array('id'=>'dep_')); ?>
     <div class="row">
+        <?php $price = ShareRateManager::getLastRate($tool->id, $step); ?>
+        Текущий курс: <?php echo $price; ?>
+    </div>
+    <div class="row">
         <?php echo CHtml::label('Укажите количество акций', 'credit'); ?>
         <?php echo CHtml::textField('Tool[number]', $tool->in_total_min, array('id' => 'stock')); ?>
     </div>
