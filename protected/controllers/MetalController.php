@@ -11,9 +11,8 @@ class MetalController extends SecureController {
     {
         $progress    = Yii::app()->user->getState('lastStep');
         $formData = Yii::app()->request->getPost('Metal');
-        
-        //Check for validate tool and user
         $gameId   = Yii::app()->user->getState('currentGameId');
+        //Check for validate tool and user
         $asset    = Asset::model()->findAllByAttributes(array('game_id' => $gameId, 'id' => $formData['id']));
         //CVarDumper::dump($asset, 10, true);
         //exit;
