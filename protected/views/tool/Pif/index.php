@@ -34,7 +34,7 @@
             $this->widget('zii.widgets.jui.CJuiSliderInput', array(
                 'id'            => mt_rand(1, 9999),
                 'name'          => 'Tool[number]',
-                'value'         => '1',
+                //'value'         => '1',
                 'event'         => 'change',
                 'options'       => array(
                     'min'   => 1,

@@ -18,7 +18,7 @@ class StockShare {
     public function instantiateAsset(Progress $progress, array $formData)
     {
         $this-> number = $formData['number'];
-        $existAsset = Asset::model()->findByAttributes(array('tool_id' => $this->id));
+        $existAsset = Asset::model()->findByAttributes(array('tool_id' => $this->id, 'game_id' => $progress->game_id));
         if($existAsset)
         {
             $this->asset = $existAsset;
@@ -35,7 +35,8 @@ class StockShare {
                 $shareStore->price          = ShareRateManager::getLastRate($this->id, $progress);
                 $shareStore->total          = $shareStore->number * $shareStore->price;
                 $shareStore->type           = 'b';
-                $shareStore->save();
+                if(!$shareStore->save())
+                    echo CVarDumper::dump ($shareStore->getErrors (), 10, true);
             }
         }
         else
@@ -65,7 +66,8 @@ class StockShare {
                 $shareStore->price          = ShareRateManager::getLastRate($this->id, $progress);
                 $shareStore->total          = $this->asset->balance_start;
                 $shareStore->type           = 'b';
-                $shareStore->save();
+                if(!$shareStore->save())
+                    echo CVarDumper::dump ($shareStore->getErrors (), 10, true);
             }
         }
     }
