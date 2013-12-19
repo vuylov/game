@@ -68,6 +68,7 @@ $this->beginWidget('zii.widgets.jui.CJuiDialog',array(
                 'duration'=>500,
             ),
         'modal' => true,
+        'position' => 'center top',
     ),
 )); ?>
 

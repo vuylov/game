@@ -54,6 +54,6 @@
 	</div><!-- footer -->
 
 </div><!-- page -->
-
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/highcharts.js"></script>
 </body>
 </html>

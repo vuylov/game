@@ -1,11 +1,11 @@
 <?php
 class StockShare {
-    private $id;    
-    private $number;
-    private $level;
-    private $basePrice;
-    private $range;
-    private $asset;
+    protected $id;    
+    protected $number;
+    protected $level;
+    protected $basePrice;
+    protected $range;
+    protected $asset;
 
     public function __construct(Tool $tool) 
     {

@@ -83,7 +83,7 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
-                'income'    => '0',
+                'income'    => '5000',
                 'prestige'  => '0'
 	),
 );
