@@ -1,1 +1,1 @@
-Path to financinal game
+Path to financinal success
