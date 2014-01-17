@@ -1,3 +1,8 @@
+<?php if(Yii::app()->user->hasFlash('success')):?>
+    <div class="info">
+        <?php echo Yii::app()->user->getFlash('success'); ?>
+    </div>
+<?php endif; ?>
 <div id="game-content">
     <div class="person-information">
         <img src="<?php echo Yii::app()->baseUrl.'/images/default_person_page_resize.png' ?>" class="avatar">
@@ -49,7 +54,14 @@
             <?php $this->widget('ext.Assets.MyAssets', array('step'=> $step)); ?>
         </div>
     </div>
-    <?php $this->widget('ext.News.NewsList', array('step' => $step)); ?>
+    <div class="news-container">
+        <div class="news-header title">Новости</div>
+        <?php $this->widget('ext.News.NewsList', array('step' => $step)); ?>
+    </div>
+    <div>
+        <div class="event-header title">События</div>
+        <?php $this->widget('ext.Events.CurrentEventsList', array('step' => $step)); ?>
+    </div>
     <div id="beforeEndContent"></div>    
 <?php
 /** Start Widget **/

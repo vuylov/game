@@ -77,7 +77,7 @@ class Event extends CActiveRecord
             $eventStore->progress_id    = $progress->id;
             $eventStore->event_id       = $event->id;
             $eventStore->game_id        = $progress->game_id;
-            $eventStore->event_start    = $progress->value;
+            $eventStore->event_start    = $progress->step;
             $eventStore->event_end      = $eventStore->event_start + $event->duration;
             $eventStore->status         = 1;
             if(!$eventStore->save())

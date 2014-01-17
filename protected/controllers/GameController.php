@@ -102,7 +102,7 @@ class GameController extends SecureController
              * Start integrating event model
              */
             //fetch current going events
-            $eventsInProgress = EventInProgress::model()->with('event')->findAllByAttributes(array('status' => 1));
+            $eventsInProgress = EventInProgress::model()->with('event')->findAllByAttributes(array('status' => 1, 'game_id' => $newStep->game_id));
             if (count($eventsInProgress) > 0) {//we have events in progress
                 foreach ($eventsInProgress as $currentEvent) {
                     if ($currentEvent->event_end == $newStep->step) {//terminate event
@@ -114,7 +114,7 @@ class GameController extends SecureController
             //fetch news from stack news whiches not ongoing
             $news   = News::model()->findAll(array(
                 'select'    => 't.id, t.name, t.description, t.chance, t.delay, t.multiplicity',
-                'condition' => 't.id NOT IN (SELECT news_id FROM newsInProgress WHERE status = 1)'
+                'condition' => 't.id NOT IN (SELECT news_id FROM newsInProgress WHERE status = 1 AND game_id ='.$newStep->game_id.')'
             ));
 
             //register news in progress

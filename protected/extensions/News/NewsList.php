@@ -9,7 +9,7 @@ class NewsList extends CWidget {
     public $step;
 
     public function run() {
-        $news = NewsInProgress::model()->with('news', 'progress')->findAll('status = :status', array(':status'=> 1));
+        $news = NewsInProgress::model()->with('news', 'progress')->findAll('t.status = :status AND t.game_id = :game', array(':status'=> 1, ':game'=>  $this->step->game_id));
         
         $this->render('list', array('news' => $news, 'step'=> $this->step));
     }
