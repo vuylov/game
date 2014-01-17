@@ -8,7 +8,7 @@
     </div>
     <div style="clear:both;"></div>
     <hr>
-    <div class="activities"><span class="title">Список покупок:</span>
+    <div class="activities"><div class="title">Список покупок:</div>
             <?php $this->widget('ext.ActivitiesList.ActivitiesList', array(
                 'step' => $step,
             )); ?>
@@ -25,9 +25,9 @@
         ?>
     </div>
     <div class="institutes">
-        <span class="institute-label title">
+        <div class="institute-label title">
             Институты:
-        </span>
+        </div>
         <div>
             <?php $this->widget('ext.Institutes.InstitutesList', array('step' => $step));?>
         </div>
@@ -44,11 +44,12 @@
                 ); ?>
     </div>
     <div class="assets">
-        <span class="my-assets title">Мои активы</span>
+        <div class="my-assets title">Мои активы</div>
         <div>
             <?php $this->widget('ext.Assets.MyAssets', array('step'=> $step)); ?>
         </div>
     </div>
+    <?php $this->widget('ext.News.NewsList', array('step' => $step)); ?>
     <div id="beforeEndContent"></div>    
 <?php
 /** Start Widget **/

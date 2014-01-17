@@ -97,12 +97,68 @@ class GameController extends SecureController
             $this->checkAssetList($newStep);
             //store new step in user session
             Yii::app()->user->setState('lastStep', $newStep);
+            
+            /*
+             * Start integrating event model
+             */
+            //fetch current going events
+            $eventsInProgress = EventInProgress::model()->with('event')->findAllByAttributes(array('status' => 1));
+            if (count($eventsInProgress) > 0) {//we have events in progress
+                foreach ($eventsInProgress as $currentEvent) {
+                    if ($currentEvent->event_end == $newStep->step) {//terminate event
+                        $currentEvent->event->afterEvent($newStep, $currentEvent);
+                    }
+                }
+            }
 
+            //fetch news from stack news whiches not ongoing
+            $news   = News::model()->findAll(array(
+                'select'    => 't.id, t.name, t.description, t.chance, t.delay, t.multiplicity',
+                'condition' => 't.id NOT IN (SELECT news_id FROM newsInProgress WHERE status = 1)'
+            ));
+
+            //register news in progress
+            if(count($news > 0))
+            {
+                foreach($news as $new)
+                {
+                    if($this->isEventRaised($new->chance) || $this->isRoutine($newStep->step, $new->multiplicity))
+                    {
+                       $new->registerNewsInProgress($new, $newStep);
+                    }
+                }
+            }
+
+            //Fetch events from ongoing news
+            $events = array();
+            $events = NewsInProgress::getRelatedEvents($newStep);
+
+            foreach ($events as $event) {
+                if ($this->isEventRaised($event->chance) || $this->isRoutine($newStep->step, $event->multiplicity)) {//true: event raised
+                    $event->beforeEvent($newStep, $event);
+                }
+            }
+            //save all changes in DB
+            $newStep->save();
+                /*
+             * Stop integratig event model
+             */
+            
             $response = $this->renderPartial('play', array('step'=>$newStep), true, true);
             echo $response;
         }
+        //pseudo generator of random digits
+        private function isEventRaised($weight) {
+            $number = mt_rand(1, 100);
+            return ($number <= $weight) ? true : false;
+        }
 
-        public function checkAssetList(Progress $progress)
+        //use for interval events
+        private function isRoutine($progressStep, $multiplicity) {
+            return ($progressStep % $multiplicity === 0) ? true : false;
+        }
+
+    public function checkAssetList(Progress $progress)
         {
             $assets     = Asset::model()->with('tool')->findAllByAttributes(array('game_id'=> $progress->game_id));
             foreach ($assets as $asset)
