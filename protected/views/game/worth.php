@@ -6,7 +6,7 @@
         <?php
             echo CHtml::ajaxLink('Хотите продать за '.$action->worth->price_sell.'?',
                     $this->createUrl('game/sell', array('id' => $action->id)),
-                    array('success'=>'function(response){$("#shopDialog").dialog("destroy");$("#game-content").html(response);}'),
+                    array('success'=>'function(response){$("#shopDialog").dialog("close").dialog("destroy");$("#game-content").html(response);}'),
                     array(
                         'id'=>  mt_rand(1, 999),
                         'confirm' => 'Вы хорошо подумали?'

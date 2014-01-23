@@ -21,9 +21,7 @@ class Asset extends CActiveRecord
 	//merge with open status rows parameter
 	public function defaultScope()
 	{
-		return array(
-	        'condition'=>"status = 'o'", 
-	    );
+		return array();
 	}
 	/**
 	 * @return string the associated database table name

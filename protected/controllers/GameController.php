@@ -19,7 +19,7 @@ class GameController extends SecureController
         public function actionList()
         {
             $userId = Yii::app()->user->getState('id');
-            $games = Game::model()->findAll('user_id = :id', array(':id'=>$userId));
+            $games = Game::model()->findAll('user_id = :id AND status = :status', array(':id'=>$userId, ':status'=> 1));
             if(!$games)
             {
                 $this->render('create');
@@ -34,19 +34,29 @@ class GameController extends SecureController
         //User create new game
         public function actionCreate()
         {
-            $game = new Game;
-            $game->user_id = Yii::app()->user->id;
-            $game->hash = substr(md5(rand(1, 9999).time()), 0, 10);  
-
-            if($game->validate()&&$game->save(false))
+            $userId     = Yii::app()->user->id;
+            
+            $countActiveGame = Game::model()->count('user_id = :id AND status = :status', array(':id'=>$userId, ':status'=> 1));
+            if($countActiveGame)//if user has active game
             {
-                $this->redirect(array('game/play', 'id'=>$game->id));
-                Yii::app()->end();
+                $this->render('error', array('msg' => 'У вас есть активная игра.'));
             }
             else
             {
-                Yii::log("errors saving Game model: " . var_export($game->getErrors(), true), CLogger::LEVEL_ERROR, __METHOD__);
-                $this->render('error', array('model'=>$game));
+                $game = new Game;
+                $game->user_id = $userId;
+                $game->hash = substr(md5(rand(1, 9999).time()), 0, 10);  
+
+                if($game->validate()&&$game->save(false))
+                {
+                    $this->redirect(array('game/play', 'id'=>$game->id));
+                    Yii::app()->end();
+                }
+                else
+                {
+                    Yii::log("errors saving Game model: " . var_export($game->getErrors(), true), CLogger::LEVEL_ERROR, __METHOD__);
+                    $this->render('error', array('model'=>$game));
+                }
             }
             
         }
