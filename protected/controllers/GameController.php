@@ -5,6 +5,7 @@ class GameController extends SecureController
         
         public function actionReload()
         {
+            $this->disableJSScript();
             $progress = Yii::app()->user->getState('lastStep');
             $response = $this->renderPartial('play', array('step'=>$progress), true, true);
             echo $response;
@@ -188,34 +189,44 @@ class GameController extends SecureController
             $this->disableJSScript();
             $step = Yii::app()->user->getState('lastStep');
             $game = Yii::app()->user->getState('currentGameId');
-            //логируем запись о покупке
-            $action = new Action;
-            $action->actiontype_id = 1;
-            $action->game_id = $game;
-            $action->worth_id = $id;
-            $action->progress_id = $step->id; //need get id
-            $action->status = 'b';
-            $action->save();
-            
             //делаем выборку по благу
             $worth = Worth::model()->findByPk($id);
-            //изменяем параметры текущего хода на актуальные    
-            $step->deposit -= $worth->price_buy;
-            $step->prestige += $worth->prestige;
-            //проверяем и сохраняем результаты в ход
-            if($step->validate() && $step->save())
-            {
-                Yii::app()->user->setState('lastStep', $step);
-            }else
-            {
-                var_dump($step->getErrors());
-            }
-            if(!$action->validate()){
-                var_dump($action->getErrors());
-            }
             
-            $response = $this->renderPartial('play', array('step'=>$step), true, true);
-            echo $response;
+            if($step->deposit < $worth->price_buy)
+            {
+                $response = $this->renderPartial('buyFail', array(), true, true);
+                echo $response;
+            }
+            else
+            {
+                //логируем запись о покупке
+                $action = new Action;
+                $action->actiontype_id = 1;
+                $action->game_id = $game;
+                $action->worth_id = $id;
+                $action->progress_id = $step->id; //need get id
+                $action->status = 'b';
+                $action->save();
+
+
+                //изменяем параметры текущего хода на актуальные    
+                $step->deposit -= $worth->price_buy;
+                $step->prestige += $worth->prestige;
+                //проверяем и сохраняем результаты в ход
+                if($step->validate() && $step->save())
+                {
+                    Yii::app()->user->setState('lastStep', $step);
+                }else
+                {
+                    var_dump($step->getErrors());
+                }
+                if(!$action->validate()){
+                    var_dump($action->getErrors());
+                }
+
+                $response = $this->renderPartial('buySuccess', array('step'=>$step), true, true);
+                echo $response;
+            }
         }
         
         public function actionSell($id)

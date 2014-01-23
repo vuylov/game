@@ -18,7 +18,7 @@
             <td><?php echo CHtml::ajaxLink(
                     'Купить',
                     $this->createUrl('game/buy', array('id'=>$worth->id)),
-                    array('success'=>'function(response){$("#shopDialog").dialog("destroy");$("#game-content").html(response);}'),
+                    array('success'=>'function(response){$("#shopDialog").html(response).dialog("open");}'),
                     //array('class'=>'buy'),
                     array('id' => mt_rand(1, 10000))
                     ); ?>

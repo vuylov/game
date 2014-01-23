@@ -84,7 +84,6 @@ $this->beginWidget('zii.widgets.jui.CJuiDialog',array(
         'position' => 'center top',
     ),
 )); ?>
-
 <?php $this->endWidget('zii.widgets.jui.CJuiDialog');
 ?>
 </div>
