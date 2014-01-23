@@ -50,11 +50,11 @@ class Tool extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('institute_id, name, description, levelPrestige, step_min, step_start', 'required'),
-			array('institute_id, levelPrestige, step_min, step_max, step_start, garanty, in_total_min, in_total_max, in_step_min, in_percent_max, out_total_min, out_total_max, out_percent_total_min, out_percent_total_max, out_percent_step_min, out_perscent_step_max, insurance', 'numerical', 'integerOnly'=>true),
+			array('institute_id, levelPrestige, step_min, step_max, step_start, garanty, in_total_min, in_total_max, in_step_min, in_percent_max, out_total_min, out_total_max, insurance', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, institute_id, name, description, levelPrestige, step_min, step_max, step_start, garanty, in_total_min, in_total_max, in_step_min, in_percent_max, out_total_min, out_total_max, out_percent_total_min, out_percent_total_max, out_percent_step_min, out_perscent_step_max, insurance', 'safe', 'on'=>'search'),
+			array('id, institute_id, name, description, levelPrestige, step_min, step_max, step_start, garanty, in_total_min, in_total_max, in_step_min, in_percent_max, out_total_min, out_total_max, out_percent_total_min, out_percent_total_max, out_perscent_step_max, insurance', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -96,7 +96,6 @@ class Tool extends CActiveRecord
 			'out_total_max' => 'Out Total Max',
 			'out_percent_total_min' => 'Out Percent Total Min',
 			'out_percent_total_max' => 'Out Percent Total Max',
-			'out_percent_step_min' => 'Out Percent Step Min',
 			'out_perscent_step_max' => 'Out Perscent Step Max',
 			'insurance' => 'Insurance',
 		);
@@ -137,7 +136,6 @@ class Tool extends CActiveRecord
 		$criteria->compare('out_total_max',$this->out_total_max);
 		$criteria->compare('out_percent_total_min',$this->out_percent_total_min);
 		$criteria->compare('out_percent_total_max',$this->out_percent_total_max);
-		$criteria->compare('out_percent_step_min',$this->out_percent_step_min);
 		$criteria->compare('out_perscent_step_max',$this->out_perscent_step_max);
 		$criteria->compare('insurance',$this->insurance);
 

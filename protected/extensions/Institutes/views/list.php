@@ -1,4 +1,6 @@
-<?php //CVarDumper::dump($step, 10, true); ?>
+<?php //CVarDumper::dump($step, 10, true);
+ define('TOOL_ACTIVE_STATUS', 1);
+?>
 <?php foreach($institutes as $institute):?>
 <div>
     <img src ="<?php echo $institute->image; ?>"> 
@@ -8,7 +10,7 @@
         <b><?php echo $institute->name.': '.$institute->description; ?></b>
         <ul class="tools">
             <?php foreach($institute->tools as $tool): ?>
-                <?php if($tool->levelPrestige <= $step->prestige): ?>
+                <?php if($tool->levelPrestige <= $step->prestige & $tool->status == TOOL_ACTIVE_STATUS): ?>
             <li><a><?php echo CHtml::ajaxLink($tool->name.'. '.$tool->description,
                                         Yii::app()->createUrl('tool/view', array('id'=>$tool->id)),    
                                         array(
@@ -16,6 +18,8 @@
                                         ),
                                         array('id'=>mt_rand(1, 999)));  ?>
                 </a></li>
+                <?php elseif($tool->levelPrestige <= $step->prestige & $tool->status !== TOOL_ACTIVE_STATUS):?>
+                <li>Инструмент - <?php echo $tool->name; ?> не активен и Вам не доступен.</li>
                 <?php else: ?>
                     <li>Инструмент - <?php echo $tool->name; ?> Вам не доступен. Необходимо набрать <?php echo $tool->levelPrestige; ?> очков престижа</li>
                 <?php endif; ?>
