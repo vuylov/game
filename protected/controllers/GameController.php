@@ -64,6 +64,7 @@ class GameController extends SecureController
         public function actionPlay($id)
         {
             Yii::app()->user->setState('currentGameId', $id);
+            $user   = Yii::app()->user->getState('id');
             $step = Progress::model()->findByAttributes(array('game_id'=>$id), array('order' => 'date_making DESC' ));
             if(!$step)//если пользователь только начал играть
             {
@@ -73,6 +74,13 @@ class GameController extends SecureController
                 $step->deposit = Yii::app()->params['income'];
                 $step->prestige = Yii::app()->params['prestige'];
                 $step->save();
+                
+                //add 1 level to him
+                $level              = new Level;
+                $level->game_id     = $id;
+                $level->progress_id = $step->id;
+                $level->value       = 0;
+                $level->save();
             }
             
             Yii::app()->user->setState('lastStep', $step);
@@ -149,6 +157,10 @@ class GameController extends SecureController
                     $event->beforeEvent($newStep, $event);
                 }
             }
+            
+            
+            
+            
             //save all changes in DB
             $newStep->save();
                 /*
@@ -168,8 +180,13 @@ class GameController extends SecureController
         private function isRoutine($progressStep, $multiplicity) {
             return ($progressStep % $multiplicity === 0) ? true : false;
         }
-
-    public function checkAssetList(Progress $progress)
+        
+        public function calculateCosts(Progress $progress)
+        {
+            
+        }
+        
+        public function checkAssetList(Progress $progress)
         {
             $assets     = Asset::model()->with('tool')->findAllByAttributes(array('game_id'=> $progress->game_id));
             foreach ($assets as $asset)
@@ -186,14 +203,7 @@ class GameController extends SecureController
             }
         }
         
-        public function actionShop()
-        {
-            $this->disableJSScript();
-            $worthes = Worth::model()->findAll();
-            $response = $this->renderPartial('shop', array('worthes'=> $worthes), true, true);
-            echo $response;
-        }
-        
+        //public function 
         public function actionBuy($id)
         {
             $this->disableJSScript();

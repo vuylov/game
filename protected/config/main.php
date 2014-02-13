@@ -26,7 +26,7 @@ return array(
 			'class'=>'system.gii.GiiModule',
 			'password'=>'12345',
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
-			//'ipFilters'=>array('10.10.3.185','::1'),
+			'ipFilters'=>array('10.10.3.185','::1'),
 		),
 	),
 
@@ -85,6 +85,14 @@ return array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
                 'income'    => '5000',
-                'prestige'  => '0'
+                'prestige'  => '0',
+                'levels'    => array(
+                    '0' => array(0, 1000),
+                    '1' => array(1001, 5000),
+                    '2' => array(5001, 20000),
+                    '3' => array(20001, 50000),
+                    '4' => array(50001, 150000),
+                    '5' => array(150001, 200000),
+                ),
 	),
 );

@@ -24,7 +24,7 @@ body
 
 #content
 {
-    padding: 20px;
+    padding: 5px;
 }
 
 #sidebar
@@ -230,6 +230,7 @@ div.search-form
 img.avatar
 {
     float: left;
+    padding: 5px;
 }
 #game-content
 {

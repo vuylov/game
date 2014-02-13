@@ -50,7 +50,7 @@ class Tool extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('institute_id, name, description, levelPrestige, step_min, step_start', 'required'),
-			array('institute_id, levelPrestige, step_min, step_max, step_start, garanty, in_total_min, in_total_max, in_step_min, in_percent_max, out_total_min, out_total_max, insurance', 'numerical', 'integerOnly'=>true),
+			array('institute_id, levelPrestige', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

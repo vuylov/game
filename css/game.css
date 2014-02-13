@@ -1,0 +1,232 @@
+#game-content{
+    background-color: #0d8aa6;
+}
+.person-information{
+    background-color: #0d8aa6;
+    color: #fff;
+    font-size: 18px;
+    height: 80px;
+}
+#game-field{
+    position: relative;
+    height: 794px;
+    background-image: url('../images/field_assets/field_c.png');
+}
+#game-house{
+    position: absolute;
+    background-image: url('../images/field_assets/house_c.png');
+    width: 249px;
+    height: 206px;
+    bottom: 180px;
+    left: 100px;
+}
+#game-shop{
+    position: absolute;
+    background-image: url('../images/field_assets/shop_c.png');
+    width: 250px;
+    height: 210px;
+    right: 0px;
+    top: 65px;
+}
+#game-bank{
+    position: absolute;
+    background-image: url('../images/field_assets/bank_c.png');
+    width: 300px;
+    height: 194px;
+    top: 60px;
+    left: 300px;
+}
+#game-pif{
+    position: absolute;
+    background-image: url('../images/field_assets/pif_c.png');
+    width: 200px;
+    height: 213px;
+    bottom: 125px;
+    right: 50px;
+}
+#game-insure{
+     position: absolute;
+     background-image: url('../images/field_assets/insure_c.png');
+     width: 200px;
+     height: 320px;
+     top: 70px;
+}
+#game-found{
+    position: absolute;
+    background-image: url('../images/field_assets/found_c.png');
+    width: 250px;
+    height: 222px;
+    top: 250px;
+    left: 500px;
+}
+.tooltip
+{
+    margin: 10px auto;
+    background: #fff;
+    padding: 10px;
+    border: 3px #ccc solid;
+    border-radius: 5px;
+    z-index: 10;
+    position: absolute;
+    top: 20px;
+}
+.has-tooltip
+{
+    cursor: pointer;
+}
+.game-link a{
+    display: block;
+    width: 100%;
+}
+#game-house .game-link a{
+    height: 206px;
+    text-indent: -9999px;
+}
+#game-bank .game-link a{
+    height: 194px;
+    text-indent: -9999px;
+}
+#game-shop .game-link a{
+    height: 210px;
+    text-indent: -9999px;
+}
+#game-insure .game-link a{
+    height: 320px;
+    text-indent: -9999px;
+}
+#game-pif .game-link a{
+    height: 213px;
+    text-indent: -9999px;
+}
+#game-found .game-link a{
+    height: 222px;
+    text-indent: -9999px;
+}
+.debug-bar
+{
+    display: none;
+}
+#game-panel{
+    position: absolute;
+    width: 100%;
+    height: 125px;
+    bottom: 0px;
+    font-family: Verdana, sans-serif;
+    font-size: 12px;
+}
+#game-manual, #game-tips{
+    position: absolute;
+    background-color: #202020;
+    width: 150px;
+    border: 3px #ccc solid;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+}
+#game-manual a, #game-tips a{
+    padding: 5px;
+    text-decoration: none;
+    display: block;
+    color: #fff;
+    
+}
+#game-manual a:hover, #game-tips a:hover{
+    text-decoration: none;
+    color: #202020;
+    background-color: #fff;
+}
+#game-manual, #game-tips, #game-news, #game-events{
+    opacity: 0.8;
+}
+#game-manual{
+     top: 10px;
+    left: 10px;
+}
+#game-tips{
+    top: 50px;
+    left: 10px;
+}
+#game-news, #game-events{
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    width: 350px;
+    height: 100px;
+    border-radius: 5px;
+    border: 3px #ccc solid;
+}
+#game-news{
+    top: 10px;
+    left: 200px;
+    width: 350px;
+}
+#game-events{
+    top: 10px;
+    left: 570px;
+    
+}
+.game-event-header, .game-news-header{
+    padding: 2px;
+    background-color: #202020;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 0px 0px 5px 5px;
+}
+.game-event-body, .game-news-body{
+    padding: 2px;
+    overflow-y: auto;
+    font-size: 10px;
+    height: 78px;
+}
+#game-popup{
+    background-color: #fff;
+    display: none;
+    position: absolute;
+    z-index: 10;
+    top: 10%;
+    left: 10%;
+    padding: 5px;
+    border: 3px #ccc solid;
+    border-radius: 5px;
+}
+#game-popup-content{
+    max-height: 500px;
+    overflow-y: auto; 
+    max-width: 600px;
+}
+#game-layout-overlay
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background: #aaa url('../images/overlay.png') 50% 50% repeat-x;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 9;
+    opacity: 0.3;
+}
+.popup-buttons{
+    padding: 5px;
+}
+#popup-close-button{
+    width: 20px;
+    height: 21px;
+    text-indent: -9999px;
+    cursor: pointer;
+    color: #fff;
+    background: url('../images/interface_parts/button_close.png') no-repeat;
+    float: right;
+}
+.negative{
+    color: #C00;
+}
+.positive{
+    color: #76C376;
+}
+.next{
+    display: block;
+    text-indent: -9999px;
+    background: url('../images/interface_parts/button_next.png') no-repeat;
+    width: 39px;
+    height: 68px;
+}

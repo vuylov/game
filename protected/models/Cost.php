@@ -1,30 +1,25 @@
 <?php
 
 /**
- * This is the model class for table "worth".
+ * This is the model class for table "cost".
  *
- * The followings are the available columns in table 'worth':
+ * The followings are the available columns in table 'cost':
  * @property integer $id
- * @property integer $worthtype_id
  * @property string $name
  * @property string $description
- * @property string $image
- * @property integer $price_buy
- * @property integer $price_sell
- * @property integer $prestige
+ * @property integer $value
  *
  * The followings are the available model relations:
- * @property Action[] $actions
- * @property Worthtype $worthtype
+ * @property WorthCost[] $worthCosts
  */
-class Worth extends CActiveRecord
+class Cost extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'worth';
+		return 'cost';
 	}
 
 	/**
@@ -35,12 +30,12 @@ class Worth extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, description, image, price_buy, price_sell, prestige', 'required'),
-			array('worthtype_id, price_buy, price_sell, prestige', 'numerical', 'integerOnly'=>true),
-			array('name, image', 'length', 'max'=>255),
+			array('name, description, value', 'required'),
+			array('value', 'numerical', 'integerOnly'=>true),
+			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, worthtype_id, name, description, image, price_buy, price_sell, prestige', 'safe', 'on'=>'search'),
+			array('id, name, description, value', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,9 +47,8 @@ class Worth extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'actions' => array(self::HAS_MANY, 'Action', 'worth_id'),
-			'worthtype' => array(self::BELONGS_TO, 'Worthtype', 'worthtype_id'),
-                        'costs'     => array(self::MANY_MANY, 'Cost', 'worth_cost(worth_id, cost_id)'),
+			//'worthCosts' => array(self::HAS_MANY, 'WorthCost', 'cost_id'),
+                        'Worths'    => array(self::MANY_MANY, 'Worth', 'worth_cost(cost_id, worth_id)')
 		);
 	}
 
@@ -65,13 +59,9 @@ class Worth extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'worthtype_id' => 'Worthtype',
 			'name' => 'Name',
 			'description' => 'Description',
-			'image' => 'Image',
-			'price_buy' => 'Price Buy',
-			'price_sell' => 'Price Sell',
-			'prestige' => 'Prestige',
+			'value' => 'Value',
 		);
 	}
 
@@ -94,13 +84,9 @@ class Worth extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('worthtype_id',$this->worthtype_id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('description',$this->description,true);
-		$criteria->compare('image',$this->image,true);
-		$criteria->compare('price_buy',$this->price_buy);
-		$criteria->compare('price_sell',$this->price_sell);
-		$criteria->compare('prestige',$this->prestige);
+		$criteria->compare('value',$this->value);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -111,7 +97,7 @@ class Worth extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Worth the static model class
+	 * @return Cost the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

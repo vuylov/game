@@ -54,10 +54,6 @@
                     'success' => 'function(response){$("#shopDialog").dialog("close").dialog("destroy");$("#game-content").html(response);}',
                 ),
                 array('id' => mt_rand(1, 9999))); ?>
-        <?php echo CHtml::link('Отмена', '#', array(
-            'id'        => $close = mt_rand(1, 1000),
-            'onclick'   => '$("#shopDialog").dialog("close");',
-        )); ?>
     </div>
     <?php echo CHtml::hiddenField('Tool[id]', $tool->id); ?>
 <?php echo CHtml::endForm(); ?>
