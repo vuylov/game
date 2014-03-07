@@ -8,11 +8,17 @@ class ShareRateManager {
      */
     static public function newRates(Progress $progress)
     {
-        $toolRates = Tool::model()->findAllByAttributes(array('type' => 'a'));
+        $toolRates = Tool::model()->with(array(
+            'userConfig'    => array(
+                'condition' => 'game_id = :game',
+                'params'    => array(':game' => $progress->game_id)
+            )
+        ))->findAllByAttributes(array('type' => 'a'));
         if(count($toolRates > 0))
         {
             foreach ($toolRates as $tool)
             {
+                
                 $rate = new ShareRate;
                 $rate->tool_id      = $tool->id;
                 $rate->progress_id  = $progress->id;
@@ -44,6 +50,27 @@ class ShareRateManager {
         ));
         return $rate[0]->value;
     }
+    
+    static public function getToolRates($toolId, Progress $progress, $limit = 10)
+    {
+        $ratesAR = ShareRate::model()->with('progress')->findAll(array(
+            'select'    => 't.id, t.tool_id, t.progress_id, t.game_id, t.value',
+            'condition' => 't.tool_id = :tool and t.game_id = :game',
+            'order'     => 't.progress_id DESC',
+            'limit'     => $limit,
+            'params'    => array('tool' => $toolId, 'game' => $progress->game_id)
+        ));
+        $rates = array(); 
+        $steps = array();
+        foreach ($ratesAR as $rate)
+        {
+            array_unshift($rates, (int)$rate->value);
+            array_unshift($steps, (int)$rate->progress->step);
+        }
+        
+        return array($rates, $steps);
+    }
+    
     /*
      * Generate new rate value.
      * Calculating based on base price + random
@@ -52,6 +79,6 @@ class ShareRateManager {
      */
     static public function generateRate(Tool $tool)
     {
-        return $tool->in_total_min + round((mt_rand(1, $tool->in_total_max) - ($tool->in_total_max / 2)));
+        return $tool->userConfig->base_price + round((mt_rand(1, $tool->userConfig->range) - ($tool->userConfig->range / 2)));
     }
 }

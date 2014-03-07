@@ -12,7 +12,7 @@ class ConsumerCreditController extends SecureController {
     {
        $progress    = Yii::app()->user->getState('lastStep');
        $asset       = Asset::model()->findByPk($id);
-       $credit      = ToolFactory::getTool($asset->tool_id);
+       $credit      = ToolFactory::getTool($asset->tool_id, $progress);
        if($credit->closeCredit($progress, $asset))
        {
            $response= $this->renderPartial('success', array(), true, true);

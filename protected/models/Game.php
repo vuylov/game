@@ -15,7 +15,9 @@
  */
 class Game extends CActiveRecord
 {
-	/**
+        public static $FAILED   = 0;
+        public static $WIN      = 1;
+        /**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
@@ -88,7 +90,7 @@ class Game extends CActiveRecord
 		$criteria->compare('user_id',$this->user_id);
 		$criteria->compare('hash',$this->hash,true);
 		$criteria->compare('date_create',$this->date_create,true);
-
+                 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
@@ -116,5 +118,17 @@ class Game extends CActiveRecord
             {
                 return false;
             } 
+        }
+        
+        public function endGame(Progress $progress, $isWin)
+        {
+            $this->status   = 0;
+            $this->last_step= $progress->step;
+            $this->prestige = $progress->prestige;
+            $this->is_win   = $isWin;
+            $this->date_end = new CDbExpression('NOW()');
+            $this->deposit  = $progress->deposit;
+            $this->scores   = round($this->prestige / $this->last_step, 5);
+            $this->save();
         }
 }

@@ -9,8 +9,6 @@ body
 
 #page
 {
-	margin-top: 5px;
-	margin-bottom: 5px;
 	background: white;
 	border: 1px solid #C9E0ED;
 }
@@ -24,7 +22,7 @@ body
 
 #content
 {
-    padding: 5px;
+    padding: 2px;
 }
 
 #sidebar
@@ -241,6 +239,7 @@ img.avatar
     position: absolute;
     top: 0px;
     right: 5px;
+    padding-top: 5px;
 }
 .title{
     background-color: #ccc;
@@ -248,4 +247,57 @@ img.avatar
 .worth-img{
     float: left;
     padding: 10px;
+}
+.form-process{
+    margin-left: 15px;
+}
+.form-authorize{
+    margin: 50px auto;
+    width: 500px;
+    border: #ccc 1px solid;
+    border-radius: 5px;
+}
+.auth-header{
+    background-color: #fff;
+    background-image: url('../images/forms/auth/header.png');
+    background-repeat: repeat-x;
+    height: 46px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 15px;
+}
+.form-authorize label{
+    display: inline-block;
+    width: 120px;
+}
+.form-authorize input[type='text'], .form-authorize input[type='password']{
+    font-size: 16px;
+    border: #ccc 1px solid;
+    border-radius: 3px;
+    height: 35px;
+    width: 460px;
+    padding: 0px 5px;
+    margin-left: 15px;
+    margin-bottom: 15px;
+}
+.form-authorize input[type='text'].error, .form-authorize input[type='password'].error{
+    border: #FF4136 1px solid;
+    color: #FF4136;
+}
+.auth-buttons{
+    margin-top: 10px;
+    text-align: right;
+}
+.auth-buttons input{
+    width: 75px;
+    height: 30px;
+    margin: 2px;
+}
+.form-authorize .errorMessage{
+    margin-top: -10px;
+    margin-left: 16px;
+    font-size: 14px;
+    color: #FF4136;
+    
 }

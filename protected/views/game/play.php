@@ -1,20 +1,21 @@
 <div id="game-content">
-    <?php if(Yii::app()->user->hasFlash('success')):?>
-    <div class="info">
-        <?php echo Yii::app()->user->getFlash('success'); ?>
-    </div>
-    <?php endif; ?>
     <div class="person-information">
-        <img src="<?php echo Yii::app()->baseUrl.'/images/avatar.png' ?>" class="avatar">
-        Текущий ход: <span id="step"><?php echo $step->step; ?><span>
-        <span><b>Наличные</b>: <?php echo $step->deposit; ?></span>
-        <span><b>Доход</b>: <?php echo Yii::app()->params['income']; ?></span>
-        <span><b>Престиж</b>: <?php echo $step->prestige; ?></span>
-        <span><b>Уровень</b>:<?php $this->widget('ext.Levels.GameLevel', array(
+        <div class="game-panel-block game-panel-block-avatar">
+            <img src="<?php echo Yii::app()->baseUrl.'/images/avatar.png' ?>">
+        </div>
+        <div class="game-panel-block"><span class="game-panel-block-name">ХОД</span><br><?php echo $step->step; ?></div>
+        <div class="game-panel-block"><span class="game-panel-block-name">НАЛИЧНЫЕ</span><br><?php echo $step->deposit; ?></div>
+        <div class="game-panel-block"><span class="game-panel-block-name">ЕЖЕХОДНЫЙ ДОХОД</span><br><?php echo ProgressIncome::getStepProgressIncome($step, true);?></div>
+        <div class="game-panel-block"><span class="game-panel-block-name">
+            ПРЕСТИЖ</span><br><?php echo $step->prestige; ?>
+        </div>
+        <div class="game-panel-block game-panel-block-stars"><span class="game-panel-block-name">
+            УРОВЕНЬ<br></span><?php $this->widget('ext.Levels.GameLevel', array(
                 'step' => $step,
             )); ?>
+        </div>
     </div>
-    <?php $this->widget('ext.GameField.GameField', array(
+            <?php $this->widget('ext.GameField.GameField', array(
                 'step' => $step,
             )); ?>
     <div class="next-step">
@@ -22,9 +23,9 @@
                     array('game/next'),
                     array(
                         'type'          => 'POST',
-                        'beforeSend'    => 'function(){$(".next").attr("active", "diabled");}',//TODO ADD LOADER
+                        'beforeSend'    => 'function(){$(".next").attr("active", "diabled");$("#game-layout-overlay").fadeIn("fast"); $("#game-loader").fadeIn("fast");}',//TODO ADD LOADER
                         'success'       => 'function(response){$("#game-content").html(response);}',
-                        'complete'      => 'function(){$(".next").attr("active", "enabled");}'
+                        'complete'      => 'function(){$(".next").attr("active", "enabled");$("#game-layout-overlay").fadeOut("fast");$("#game-loader").fadeOut("fast");}'
                     ),
                     array(
                         'id'        => mt_rand(1, 9999),
@@ -59,10 +60,9 @@ $this->beginWidget('zii.widgets.jui.CJuiDialog',array(
 <?php $this->endWidget('zii.widgets.jui.CJuiDialog');
 ?>
     <div id="game-popup">
-        <div class="popup-buttons">
             <div id="popup-close-button">Закрыть</div>
-        </div>
         <div id="game-popup-content"></div>
     </div>
     <div id="game-layout-overlay"></div>
+    <div id="game-loader"></div>
 </div>

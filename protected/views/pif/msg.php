@@ -1,9 +1,12 @@
 <div><?php echo $msg; ?></div>
- <div class="row">
+ <div class="row game-button-panel">
     <?php 
         echo CHtml::ajaxLink('Закрыть',
          Yii::app()->createUrl('game/reload'), 
-         array('success' => 'function(response){$("#shopDialog").dialog("close").dialog("destroy");$("#game-content").html(response);}'), 
-         array('id' => mt_rand(1, 9999)));
+         array('success' => 'function(response){$("#game-popup-content").fadeOut("fast");$("#game-content").html(response);}'), 
+         array(
+             'id'   => mt_rand(1, 9999),
+             'class'=> 'game-tool-button'
+             ));
     ?>
  </div>

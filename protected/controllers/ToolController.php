@@ -12,16 +12,26 @@ class ToolController extends SecureController
         
         public function actionView($id)
         {
-            //echo 100;
-            $tool       = Tool::model()->findByPk($id);
+            $step       = Yii::app()->user->getState('lastStep');
+            $tool       = Tool::model()->with(array(
+                'userConfig'=>array(
+                    'condition' => 'game_id = :game',
+                    'params'    => array(':game' => $step->game_id)
+                )
+            ))->findByPk($id);
             $response   = $this->renderPartial('view', array('tool' => $tool), true, true);
             echo $response;
         }
         
         public function actionUse($id)
         {
-            $tool       = Tool::model()->findByPk($id);
             $step       = Yii::app()->user->getState('lastStep');
+            $tool       = Tool::model()->with(array(
+                'userConfig' => array(
+                    'condition' => 'game_id = :game',
+                    'params'    => array(':game' => $step->game_id)
+                )
+            ))->findByPk($id);
             $response = $this->renderPartial($tool->class.'/index', array('tool' => $tool, 'step' => $step), true, true);
             echo $response;
         }
@@ -33,7 +43,7 @@ class ToolController extends SecureController
             $formData   = Yii::app()->request->getPost('Tool');
             
             //get proper tool class with class factory
-            $tool           = ToolFactory::getTool($formData['id']);
+            $tool           = ToolFactory::getTool($formData['id'], $step);
             //instantiate asset and save it
             $tool->instantiateAsset($step, $formData);
             //change deposit in current progress of user

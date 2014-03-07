@@ -26,7 +26,7 @@ class MetalController extends SecureController {
         
         $asset = $asset[0];
         
-        $stockShare = ToolFactory::getTool($asset->tool_id);
+        $stockShare = ToolFactory::getTool($asset->tool_id, $progress);
         if($asset->number < $formData['number'])
         {
             $msg = 'У вас нет столько золота';

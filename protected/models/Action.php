@@ -6,14 +6,19 @@
  * The followings are the available columns in table 'action':
  * @property integer $id
  * @property integer $actiontype_id
+ * @property integer $game_id
  * @property integer $worth_id
  * @property integer $progress_id
  * @property string $date_create
+ * @property string $status
  *
  * The followings are the available model relations:
+ * @property Game $game
  * @property Actiontype $actiontype
- * @property Worth $worth
  * @property Progress $progress
+ * @property Worth $worth
+ * @property Tool[] $tools
+ * @property WorthInsure[] $worthInsures
  */
 class Action extends CActiveRecord
 {
@@ -33,11 +38,12 @@ class Action extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('actiontype_id, worth_id, progress_id, date_create', 'required'),
-			array('actiontype_id, worth_id, progress_id', 'numerical', 'integerOnly'=>true),
+			array('actiontype_id, game_id, worth_id, progress_id, date_create', 'required'),
+			array('actiontype_id, game_id, worth_id, progress_id', 'numerical', 'integerOnly'=>true),
+			array('status', 'length', 'max'=>1),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, actiontype_id, worth_id, progress_id, date_create', 'safe', 'on'=>'search'),
+			array('id, actiontype_id, game_id, worth_id, progress_id, date_create, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -49,9 +55,12 @@ class Action extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'game' => array(self::BELONGS_TO, 'Game', 'game_id'),
 			'actiontype' => array(self::BELONGS_TO, 'Actiontype', 'actiontype_id'),
-			'worth' => array(self::BELONGS_TO, 'Worth', 'worth_id'),
 			'progress' => array(self::BELONGS_TO, 'Progress', 'progress_id'),
+			'worth' => array(self::BELONGS_TO, 'Worth', 'worth_id'),
+			'tools' => array(self::HAS_MANY, 'Tool', 'garanty'),
+			'worthInsures' => array(self::HAS_MANY, 'WorthInsure', 'action_id'),
 		);
 	}
 
@@ -63,9 +72,11 @@ class Action extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'actiontype_id' => 'Actiontype',
+			'game_id' => 'Game',
 			'worth_id' => 'Worth',
 			'progress_id' => 'Progress',
 			'date_create' => 'Date Create',
+			'status' => 'Status',
 		);
 	}
 
@@ -89,9 +100,11 @@ class Action extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('actiontype_id',$this->actiontype_id);
+		$criteria->compare('game_id',$this->game_id);
 		$criteria->compare('worth_id',$this->worth_id);
 		$criteria->compare('progress_id',$this->progress_id);
 		$criteria->compare('date_create',$this->date_create,true);
+		$criteria->compare('status',$this->status,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

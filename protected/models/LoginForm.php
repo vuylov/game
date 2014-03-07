@@ -20,7 +20,8 @@ class LoginForm extends CFormModel
 	{
 		return array(
 			// username and password are required
-			array('email, password', 'required', 'message'=>'Введите значения для {attribute}'),
+			array('email, password', 'required', 'message'=>'Введите значения для поля "{attribute}"'),
+                        array('email', 'email', 'message' => 'Неверный почтовый адрес'),
 			// password needs to be authenticated
 			array('password', 'authenticate'),
 		);
@@ -47,7 +48,7 @@ class LoginForm extends CFormModel
 		{
 			$this->_identity=new UserIdentity($this->email,$this->password);
 			if(!$this->_identity->authenticate())
-				$this->addError('password','Неверный логин-пароль.');
+				$this->addError('password','Неверный логин/пароль');
 		}
 	}
 

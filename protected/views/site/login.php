@@ -8,36 +8,37 @@ $this->breadcrumbs=array(
 	'Авторизация',
 );
 ?>
-
-<h1>Авторизация в игре</h1>
-
-<p>Заполните поля ранее выданными учетными данными:</p>
-
-<div class="form">
+<div class="form-authorize">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'login-form',
-	'enableClientValidation'=>true,
+	'enableClientValidation'=>false,
 	'clientOptions'=>array(
 		'validateOnSubmit'=>true,
 	),
 )); ?>
 
-	<p class="note">Поля с<span class="required">*</span> обязательны к заполнению.</p>
-
+	
+        <div class="row auth-header">
+            Авторизация
+        </div>
+        <div>
+            <?php //echo $form->errorSummary($model); ?>
+        </div>
 	<div class="row">
-		<?php echo $form->labelEx($model,'email'); ?>
-		<?php echo $form->textField($model,'email'); ?>
+		<?php //echo $form->labelEx($model,'email'); ?>
+		<?php echo $form->textField($model,'email', array('placeholder' => 'Почтовый адрес')); ?>
 		<?php echo $form->error($model,'email'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'password'); ?>
-		<?php echo $form->passwordField($model,'password'); ?>
+		<?php //echo $form->labelEx($model,'password'); ?>
+		<?php echo $form->passwordField($model,'password', array('placeholder' => 'Пароль')); ?>
+                <?php echo $form->error($model,'password'); ?>
 	</div>
-
-	<div class="row buttons">
+	<div class="row auth-buttons">
 		<?php echo CHtml::submitButton('Войти'); ?>
 	</div>
-
+        
+    
 <?php $this->endWidget(); ?>
 </div><!-- form -->

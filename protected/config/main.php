@@ -26,7 +26,7 @@ return array(
 			'class'=>'system.gii.GiiModule',
 			'password'=>'12345',
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
-			'ipFilters'=>array('10.10.3.185','::1'),
+			//'ipFilters'=>array('10.10.3.185','::1'),
 		),
 	),
 
@@ -37,15 +37,17 @@ return array(
 			'allowAutoLogin'=>false,
 		),
 		// uncomment the following to enable URLs in path-format
-		/*
+		
 		'urlManager'=>array(
-			'urlFormat'=>'path',
-			'rules'=>array(
+			'urlFormat'     =>'path',
+                        //'showScriptName'=>false,
+			/*'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
-				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>/<id:\d+>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-			),
+			),*/
 		),
+                /*
 		'db'=>array(
 			'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/testdrive.db',
 		),
@@ -84,15 +86,18 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
-                'income'    => '5000',
+                'income'    => '1000000',
                 'prestige'  => '0',
                 'levels'    => array(
-                    '0' => array(0, 1000),
-                    '1' => array(1001, 5000),
-                    '2' => array(5001, 20000),
-                    '3' => array(20001, 50000),
-                    '4' => array(50001, 150000),
-                    '5' => array(150001, 200000),
+                    array(0, 1000, 'intro.mp4'),
+                    array(1001, 5000, 'level1.mp4'),
+                    array(5001, 20000, 'level2.mp4'),
+                    array(20001, 50000, 'level3.mp4'),
+                    array(50001, 163999, 'level4.mp4'),
+                    array(164000, 200000, 'win.mp4'),
                 ),
+                'video_game_over' => 'fail.mp4',
+                'insure_period'   => 12,
+                'insure_rate'     => 0.8,  
 	),
 );

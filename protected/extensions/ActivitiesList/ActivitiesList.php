@@ -8,7 +8,12 @@ class ActivitiesList extends CWidget {
   
     public function run(){
         $step = $this->step;
-        $activities = Action::model()->with('worth')->findAllByAttributes(array('game_id' => $step->game_id, 'status' => 'b'));
+        $activities = Action::model()->with(array(
+            'worthInsures',
+            'worth' => array(
+                'with' => array('costs')
+            )
+        ))->findAllByAttributes(array('game_id' => $step->game_id, 'status' => 'b'));
         $this->render('list', array('activities' => $activities));
     }
 }

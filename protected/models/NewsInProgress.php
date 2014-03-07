@@ -132,7 +132,7 @@ class NewsInProgress extends CActiveRecord
                 //fetch related with news events and not exist in eventInProgress table
                 $events = Event::model()->findAll(array(
                     'select'    => 't.id, t.news_id, t.name, t.description, t.duration, t.chance, t.multiplicity, t.eventHandlerClass',
-                    'condition' => 't.news_id = :news and t.id NOT IN (SELECT event_id FROM eventInProgress WHERE status = 1 AND game_id ='.$progress->game_id.')',
+                    'condition' => 't.status = 1 AND t.news_id = :news and t.id NOT IN (SELECT event_id FROM eventInProgress WHERE status = 1 AND game_id ='.$progress->game_id.')',
                     'params'    => array('news' => $new->news_id)
                 ));
                 $eventsStack = array_merge($eventsStack, $events);

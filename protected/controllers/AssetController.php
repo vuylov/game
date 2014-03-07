@@ -11,7 +11,7 @@ class AssetController extends SecureController {
     {
         $step   = Yii::app()->user->getState('lastStep');
         $asset  = Asset::model()->with('tool')->findByPk($id);
-        $tool   = ToolFactory::getTool($asset->tool_id);
+        $tool   = ToolFactory::getTool($asset->tool_id, $step);
         $tool->setAsset($asset);
         $response = $this->renderPartial(get_class($tool).'/view', array('tool' => $tool, 'asset' => $asset, 'progress'=> $step), true, true);
         echo $response;

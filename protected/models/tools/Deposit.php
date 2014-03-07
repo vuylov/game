@@ -8,7 +8,7 @@ class Deposit {
     private $asset;
 
     public function __construct(Tool $tool) {
-        $this->procent      = $tool->out_percent_total_max;
+        $this->procent      = $tool->userConfig->procent;
         $this->insurance    = $tool->insurance;
         $this->id           = $tool->id;
     }
@@ -39,7 +39,7 @@ class Deposit {
 
    public function stepProcess(Progress $progress, Asset $asset)
    {
-       $delta               = ($asset->balance_end * $this->procent)/12; //formula
+       $delta               = round(($asset->balance_end * $this->procent)/12); //formula
        $asset->balance_end += $delta;
        $asset->save();
    }

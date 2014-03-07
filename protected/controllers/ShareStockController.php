@@ -13,6 +13,9 @@ class ShareStockController extends SecureController{
         $progress    = Yii::app()->user->getState('lastStep');
         $formData = Yii::app()->request->getPost('StockShare');
         
+        //CVarDumper::dump($_POST, 10, true);
+        //exit;
+        
         //Check for validate tool and user
         $gameId   = Yii::app()->user->getState('currentGameId');
         $asset    = Asset::model()->findAllByAttributes(array('game_id' => $gameId, 'id' => $formData['id']));
@@ -28,7 +31,7 @@ class ShareStockController extends SecureController{
         
         $asset = $asset[0];
         
-        $stockShare = ToolFactory::getTool($asset->tool_id);
+        $stockShare = ToolFactory::getTool($asset->tool_id, $progress);
         if($asset->number < $formData['number'])
         {
             $msg = 'У вас нет столько акций';

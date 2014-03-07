@@ -1,12 +1,4 @@
 <div id="game-field">
-    <div id="game-house" class="has-tooltip">
-        <div class="game-link">
-            <a href="#">Дом</a>
-        </div>
-        <div class="tooltip">
-            Ваш дом. Ваша крепость.
-        </div>
-    </div>
     <div id="game-shop" class="has-tooltip">
         <div class="game-link">
             <?php echo CHtml::ajaxLink('Магазин', 
@@ -22,7 +14,7 @@
                     );?>
         </div>
         <div class="tooltip">
-            Магазин. Здесь можно что-нибудь купить
+            Универсам
         </div>
     </div>
     <?php if(is_array($institutes)): ?>
@@ -32,14 +24,18 @@
                     <a href="#"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></a>
                 </div>
                 <div class="tooltip">
-                    <?php echo $institute->description;?>
+                    <?php echo $institute->name;?>
                 </div>
             </div>
         <?php endforeach; ?>
     <?php endif;?>
+    <?php $this->widget('ext.GameHouseField.GameHouse', array(
+                'step' => $step,
+            )); 
+    ?>
     <div id="game-panel">
         <div id="game-manual">
-            <a href="#">Руководство</a>
+            <a href="#" target="_blank">Руководство</a>
         </div>
         <div id="game-tips">
             <a href="#">Подсказки</a>
@@ -65,6 +61,11 @@
         $(".has-tooltip").hover(
                 function(){
                     var tooltip = $(this).children(".tooltip").stop();
+                    var hTip    = tooltip.outerHeight();
+                    var wTip    = tooltip.outerWidth();
+                    var wPar    = $(this).outerWidth();
+                    var lPos    = (wTip > wPar)? 0 : (wPar - wTip)/2;
+                    tooltip.css({left:0 + lPos, top:-10 - hTip});
                     tooltip.fadeIn("fast");
                 }, 
                 function(){
@@ -76,7 +77,7 @@
                     $(this).stop().animate({opacity:"1"}, "fast");
                 },
                 function(){
-                    $(this).stop().animate({opacity:"0.8"}, "fast");
+                    $(this).stop().animate({opacity:"0.5"}, "fast");
                 });
      //disable sclicking
      $(".next").on("click", function(){
@@ -86,7 +87,7 @@
         return false;
     });
     //register controllers for home
-        $("#game-house .game-link a").on("click", function(){
+        $("#game-house .game-link a, #game-trailer .game-link a, #game-cottage .game-link a").on("click", function(){
             $.ajax({
                 type: "POST",
                 url: "'.Yii::app()->createUrl('institute/home').'",
@@ -99,6 +100,20 @@
             });
             return false;
         });
+     //register controller for tips
+     $("#game-tips").on("click", "a", function(){
+        $.ajax({
+                type: "POST",
+                url: "'.Yii::app()->createUrl('game/tip').'",
+                success: function(response){
+                        $("#game-layout-overlay").fadeIn("fast");
+                        $("#game-popup").removeClass().addClass("popup-tip");
+                        $("#game-popup-content").html(response);
+                        $("#game-popup").fadeIn("fast");},
+                error: function(xhr){alert("failure"+xhr.readyState+this.url)}
+            });
+            return false;
+    }); 
      //register controller gor bank
      $("#game-bank .game-link a").on("click", function(){
         $.ajax({
@@ -157,8 +172,14 @@
     });
      //handle for close button
      $("#popup-close-button").on("click", function(){
+            $.ajax({
+                type: "POST",
+                url: "'.Yii::app()->createUrl('game/reload').'",
+                success: function(response){$("#game-content").html(response);},
+                error: function(xhr){alert("failure"+xhr.readyState+this.url)}
+            });
             $("#game-popup").fadeOut("slow");
-            $("#game-layout-overlay").fadeOut("fast");
+            $("#game-layout-overlay").fadeOut("slow");
         });
     });';
 ?>

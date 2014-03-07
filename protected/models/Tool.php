@@ -70,6 +70,7 @@ class Tool extends CActiveRecord
 			'currentcourses' => array(self::HAS_MANY, 'Currentcourse', 'tool_id'),
 			'garanty0' => array(self::BELONGS_TO, 'Action', 'garanty'),
 			'institute' => array(self::BELONGS_TO, 'Institute', 'institute_id'),
+                        'userConfig'  => array(self::HAS_ONE, 'UserToolConfig', 'tool_id')
 		);
 	}
 

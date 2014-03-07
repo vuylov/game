@@ -1,5 +1,4 @@
 <?php
-
 class GameController extends SecureController
 {
         
@@ -47,8 +46,24 @@ class GameController extends SecureController
                 $game->user_id = $userId;
                 $game->hash = substr(md5(rand(1, 9999).time()), 0, 10);  
 
-                if($game->validate()&&$game->save(false))
+                if($game->validate() && $game->save(false))
                 {
+                    //Инициализируем значения по институтам по игре
+                    $tools = Tool::model()->findAll();
+                    foreach ($tools as $tool)
+                    {
+                        $userTool               = new UserToolConfig;
+                        $userTool->tool_id      = $tool->id;
+                        $userTool->game_id      = $game->id;
+                        $userTool->step_min     = ($tool->step_min)?$tool->step_min:0;
+                        $userTool->step_max     = ($tool->step_max)?$tool->step_max:0;
+                        $userTool->base_price   = ($tool->in_total_min)?$tool->in_total_min:0;
+                        $userTool->range        = ($tool->in_total_max)?$tool->in_total_max:0;
+                        $userTool->procent      = ($tool->in_step_min)?$tool->in_step_min:0;
+                        $userTool->status       = 1;
+                        $userTool->save();
+                    }
+                    
                     $this->redirect(array('game/play', 'id'=>$game->id));
                     Yii::app()->end();
                 }
@@ -61,10 +76,19 @@ class GameController extends SecureController
             
         }
         
-        public function actionPlay($id)
+        public function actionPlay($id)//id - номер игры
         {
-            Yii::app()->user->setState('currentGameId', $id);
+            //check game
             $user   = Yii::app()->user->getState('id');
+            $game   = Game::model()->findByAttributes(array('user_id' => $user, 'id' => (int)$id));
+            if(!$game)
+            {
+                $this->redirect(array('site/login'));
+                Yii::app()->end();
+            }
+            
+            Yii::app()->user->setState('currentGameId', $id);
+            
             $step = Progress::model()->findByAttributes(array('game_id'=>$id), array('order' => 'date_making DESC' ));
             if(!$step)//если пользователь только начал играть
             {
@@ -75,12 +99,17 @@ class GameController extends SecureController
                 $step->prestige = Yii::app()->params['prestige'];
                 $step->save();
                 
-                //add 1 level to him
-                $level              = new Level;
-                $level->game_id     = $id;
-                $level->progress_id = $step->id;
-                $level->value       = 0;
-                $level->save();
+                //делаем инициализацию первичных значений для пользователя,
+                //в частности, 
+                //1. арендуем для него жилье
+                $action                 = new Action;
+                $action->actiontype_id  = 1; //покупка за наличные
+                $action->game_id        = $step->game_id;
+                $action->worth_id       = 7; //аренда жилья
+                $action->progress_id    = $step->id;
+                $action->status         = 'b';//статус - "куплен"
+                $action->save();
+                
             }
             
             Yii::app()->user->setState('lastStep', $step);
@@ -101,7 +130,7 @@ class GameController extends SecureController
             //Create new stepp of game progress and fill with paramters
             $newStep = new Progress();
             $newStep->step      = $lastStep->step + 1;
-            $newStep->deposit   = $lastStep->deposit + Yii::app()->params['income'];
+            $newStep->deposit   = $lastStep->deposit;
             $newStep->prestige  += $lastStep->prestige;
             $newStep->game_id = $game;
             if(!$newStep->save())
@@ -114,6 +143,8 @@ class GameController extends SecureController
             
             //check assets list for process finance tools
             $this->checkAssetList($newStep);
+            //check dates of insure worthes
+            $this->checkInsureList($newStep);
             //store new step in user session
             Yii::app()->user->setState('lastStep', $newStep);
             
@@ -133,7 +164,7 @@ class GameController extends SecureController
             //fetch news from stack news whiches not ongoing
             $news   = News::model()->findAll(array(
                 'select'    => 't.id, t.name, t.description, t.chance, t.delay, t.multiplicity',
-                'condition' => 't.id NOT IN (SELECT news_id FROM newsInProgress WHERE status = 1 AND game_id ='.$newStep->game_id.')'
+                'condition' => 't.status = 1 AND t.id NOT IN (SELECT news_id FROM newsInProgress WHERE status = 1 AND game_id ='.$newStep->game_id.')'
             ));
 
             //register news in progress
@@ -158,9 +189,8 @@ class GameController extends SecureController
                 }
             }
             
-            
-            
-            
+            //calculate income without credit payment
+            $newStep->deposit += ProgressIncome::getStepProgressIncome($newStep);
             //save all changes in DB
             $newStep->save();
                 /*
@@ -181,17 +211,12 @@ class GameController extends SecureController
             return ($progressStep % $multiplicity === 0) ? true : false;
         }
         
-        public function calculateCosts(Progress $progress)
-        {
-            
-        }
-        
         public function checkAssetList(Progress $progress)
         {
-            $assets     = Asset::model()->with('tool')->findAllByAttributes(array('game_id'=> $progress->game_id));
+            $assets     = Asset::model()->with('tool')->findAllByAttributes(array('game_id'=> $progress->game_id, 'status' => 'o'));
             foreach ($assets as $asset)
             {
-                $tool       = ToolFactory::getTool($asset->tool_id);
+                $tool       = ToolFactory::getTool($asset->tool_id, $progress);
                 if($progress->step == $asset->step_end)
                 {
                     $tool->endProcess($progress, $asset);
@@ -203,6 +228,21 @@ class GameController extends SecureController
             }
         }
         
+        public function checkInsureList(Progress $progress)
+        {
+            $worthInsures = WorthInsure::model()->findAll(array(
+                'condition' => 'game_id = :game AND status = 1',
+                'params'    => array(':game'=> $progress->game_id)
+            ));
+            
+            foreach($worthInsures as $insure)
+            {
+                if($insure->step_end == $progress->step)
+                    $insure->endInsure();
+            }
+        }
+
+
         //public function 
         public function actionBuy($id)
         {
@@ -219,6 +259,14 @@ class GameController extends SecureController
             }
             else
             {
+                //тут убираем аренду при покупке квартиры или коттеджа
+                 if(in_array((int)$worth->id, array(5, 6))){
+                     $rent = Action::model()->findAll('game_id = :game AND worth_id = :worth', array(':game' => $step->game_id, ':worth' => 7));
+                     //CVarDumper::dump($rent, 10, true);
+                     $rent[0]->status = 's';
+                     $rent[0]->save();
+                 }
+                 
                 //логируем запись о покупке
                 $action = new Action;
                 $action->actiontype_id = 1;
@@ -255,11 +303,23 @@ class GameController extends SecureController
             $step = Yii::app()->user->getState('lastStep');
             $game = Yii::app()->user->getState('currentGameId');
             
-            $action = Action::model()->with('worth')->findByPk($id);
+            $action = Action::model()->with('worth', 'worthInsures')->findByPk($id);
+            if(!$action){
+                echo 'Данный параметр не доступен';
+                Yii::app()->end();
+            }
+            
+            $insureRemainsMoney = 0;
+            if(count($action->worthInsures) > 0){
+                $insure             = $action->worthInsures[0];
+                $insureRemainsMoney = InsureRemainsCalculator::Calculate($step, $insure);
+                $insure->endInsure();
+            }
+            
             $action->status = 's';
             if($action->save())
             {
-                $step->deposit += $action->worth->price_sell;
+                $step->deposit += $action->worth->price_sell + $insureRemainsMoney;
                 $step->prestige -= $action->worth->prestige;
                 if($step->save())
                 {
@@ -278,9 +338,13 @@ class GameController extends SecureController
             $step = Yii::app()->user->getState('lastStep');
             $game = Yii::app()->user->getState('currentGameId');
             
-            $action = Action::model()->with('worth')->findByPk($id);
+            $action = Action::model()->with('worth', 'worthInsures')->findByPk($id);
+            if(!$action){
+                echo 'Ценность с таким значением не найдена';
+                Yii::app()->end();
+            }
             
-            $response = $this->renderPartial('worth', array('action' => $action), true, true);
+            $response = $this->renderPartial('worth', array('action' => $action, 'progress'=>$step), true, true);
             echo $response;
         }
         
@@ -289,6 +353,28 @@ class GameController extends SecureController
             Yii::app()->clientscript->scriptMap['jquery.js'] = false;
             Yii::app()->clientscript->scriptMap['jquery.ui.js'] = false;
             Yii::app()->clientscript->scriptMap['jquery-ui.min.js'] = false;
+        }
+        
+        public function actionTip()
+        {
+            $this->disableJSScript();
+            $progress   = Yii::app()->user->getState('lastStep');
+            $tips       = Tip::model()->with(array(
+                'level' => array(
+                    'alias'     => 'l',
+                    'condition' => 'l.prestige_low <= :prestige AND l.prestige_high > :prestige',
+                    'params'    => array(':prestige' => $progress->prestige)
+                )
+            ))->findAll();
+            if($tips){
+                $index = mt_rand(0, count($tips) - 1);
+                $response  = $this->renderPartial('tip', array('tip' => $tips[$index]), true, true);
+            }else{
+                $tip = new Tip();
+                $tip->description = 'Доступных подсказок нет';
+                $response  =  $this->renderPartial('tip', array('tip' => $tip), true, true);
+            }
+            echo $response;
         }
         
 }

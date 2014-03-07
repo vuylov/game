@@ -1,5 +1,5 @@
 <div class = "row">
-    <?php echo $tool->name; ?>
+    <?php echo $asset->tool->name; ?>
 </div>
 <div class="row">
     Процентная ставка: 
@@ -23,16 +23,16 @@
             echo $tool->monthPayment($tool->getProcent(), $asset->step_end - $asset->step_start, $asset->balance_start);
         ?>
 </div>
-<div class="row">
+<div class="row game-button-panel">
     <hr>
     <?php
         echo CHtml::ajaxLink(
                 'Погасить досрочно', 
                 Yii::app()->createUrl('consumerCredit/close', array('id' => $asset->id)),
-                array('success' => 'function(response){$("#shopDialog").html(response).dialog("open"); return false;}'), 
-                array('id'=>mt_rand(1, 999)));
+                array('success' => 'function(response){$("#game-popup-content").html(response); return false;}'), 
+                array(
+                    'id'    =>mt_rand(1, 999),
+                    'class' => 'game-tool-button'
+                    ));
     ?>
-    <?php echo CHtml::link('Закрыть', '#', array(
-            'onclick'=>'$("#shopDialog").dialog("close");'
-        )); ?>
 </div>

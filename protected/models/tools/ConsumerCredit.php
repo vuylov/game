@@ -8,13 +8,14 @@ class ConsumerCredit{
 	public function __construct(Tool $tool)
 	{
 		$this->id	= $tool->id;
-		$this->procent 	= $tool->in_step_min;
-		$this->money 	= $tool->in_total_max;
+		$this->procent 	= $tool->userConfig->procent;
+		$this->money 	= $tool->userConfig->range;
 	}
         
         public function getProcent()
         {
             return $this->procent;
+            //CVarDumper::
         }
 
 	public function instantiateAsset(Progress $progress, array $formData)
@@ -49,11 +50,11 @@ class ConsumerCredit{
 	public function stepProcess(Progress $progress, Asset $asset)
 	{
 		$interval   = $asset->step_end - $asset->step_start;
-		$delta      = $this->annuitetPayment($this->procent, $interval) * $asset->balance_start;          
+		$delta      = $this->annuitetPayment($this->procent, $interval) * $asset->balance_start;
 		$asset->balance_end -= $delta;
 		$asset->save();
 
-		$progress->deposit -= round($delta);
+		$progress->deposit -= round($delta); 
 		$progress->save();
 	}
 
@@ -74,7 +75,7 @@ class ConsumerCredit{
         public function annuitetPayment($procent, $interval)
         {
             $monthProcent   = $procent / 12;
-            $K              =   ($monthProcent*(bcpow(1 + $monthProcent, $interval, 4))) / (bcpow(1+$monthProcent, $interval, 4) - 1);
+            $K              =   ($monthProcent*(pow(1 + $monthProcent, $interval))) / (pow(1+$monthProcent, $interval) - 1);
             return $K;
         }
         

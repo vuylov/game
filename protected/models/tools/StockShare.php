@@ -11,14 +11,14 @@ class StockShare {
     {
         $this->id           = $tool->id;
         $this->level        = $tool->levelPrestige;
-        $this->basePrice    = $tool->in_total_min;
-        $this->range        = $tool->in_total_max;
+        $this->basePrice    = $tool->userConfig->base_price;
+        $this->range        = $tool->userConfig->range;
     }
     
     public function instantiateAsset(Progress $progress, array $formData)
     {
         $this-> number = $formData['number'];
-        $existAsset = Asset::model()->findByAttributes(array('tool_id' => $this->id, 'game_id' => $progress->game_id));
+        $existAsset = Asset::model()->findByAttributes(array('tool_id' => $this->id, 'game_id' => $progress->game_id, 'status' => 'o'));
         if($existAsset)
         {
             $this->asset = $existAsset;

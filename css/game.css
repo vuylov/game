@@ -7,68 +7,161 @@
     font-size: 18px;
     height: 80px;
 }
+.person-information:after{
+    clear: both;
+}
+#game-field, #game-cottage, #game-house, #game-trailer, #game-bank, 
+#game-found, #game-pif, #game-shop, #game-insure, #game-helicopter, 
+#game-yacht, #game-newcar, #game-oldcar, #game-suit, #game-expensive-suit{
+    display: block; 
+    background: url('../images/sprite_c.png') no-repeat; 
+}
 #game-field{
     position: relative;
-    height: 794px;
-    background-image: url('../images/field_assets/field_c.png');
+    background-position: -1px -0px; 
+    width: 1000px; 
+    height: 565px;
 }
-#game-house{
+#game-yacht{
     position: absolute;
-    background-image: url('../images/field_assets/house_c.png');
-    width: 249px;
-    height: 206px;
-    bottom: 180px;
-    left: 100px;
+    background-position: -139px -965px; 
+    width: 113px; 
+    height: 86px;
+    bottom: 75px;
+    left: 290px;
+    z-index: 9;
 }
-#game-shop{
+#game-oldcar, #game-newcar{
     position: absolute;
-    background-image: url('../images/field_assets/shop_c.png');
-    width: 250px;
-    height: 210px;
-    right: 0px;
-    top: 65px;
+    background-position: -903px -983px; 
+    width: 73px; 
+    height: 56px;
+    bottom: 130px;
+    left: 480px;
+    z-index: 8;
 }
-#game-bank{
+#game-newcar{
+    background-position: -903px -926px;
+    left: 342px;
+    bottom: 112px;
+}
+#game-suit, #game-expensive-suit{
     position: absolute;
-    background-image: url('../images/field_assets/bank_c.png');
-    width: 300px;
-    height: 194px;
-    top: 60px;
-    left: 300px;
-}
-#game-pif{
-    position: absolute;
-    background-image: url('../images/field_assets/pif_c.png');
-    width: 200px;
-    height: 213px;
-    bottom: 125px;
-    right: 50px;
-}
-#game-insure{
-     position: absolute;
-     background-image: url('../images/field_assets/insure_c.png');
-     width: 200px;
-     height: 320px;
-     top: 70px;
-}
-#game-found{
-    position: absolute;
-    background-image: url('../images/field_assets/found_c.png');
-    width: 250px;
-    height: 222px;
-    top: 250px;
+    background-position: -928px -786px; 
+    width: 24px; 
+    height: 26px;
+    bottom: 170px;
     left: 500px;
+    z-index: 10;
+}
+#game-expensive-suit{
+    background-position: -953px -786px;
+}
+#game-house, #game-cottage, #game-trailer, #game-house:hover, #game-cottage:hover{
+    position: absolute;
+    background-position: -334px -566px; 
+    width: 332px;
+    height: 219px;
+    bottom: 70px;
+    left: 210px;
+    z-index: 5;
+}
+#game-cottage{
+    background-position: -1px -566px;
+}
+#game-trailer{
+    background-position: -667px -566px;
+}
+#game-house:hover{
+    background-image: url('../images/gifs/house.gif');
+    background-position: 0px 0px;
+}
+#game-cottage:hover{
+    background-image: url('../images/gifs/cottage.gif');
+    background-position: 0px 0px;
+}
+#game-shop, #game-shop:hover{
+    position: absolute;
+    background-position: -739px -786px; 
+    width: 188px; 
+    height: 139px;
+    right: 135px;
+    top: 63px;
+}
+#game-shop:hover{
+    background-image: url('../images/gifs/shop.gif');
+    background-position: 0px 0px;
+}
+#game-bank, #game-bank:hover{
+    position: absolute;
+    background-position: -1px -786px; 
+    width: 273px; 
+    height: 178px;
+    top: 8px;
+    left: 325px;
+}
+#game-bank:hover{
+    background-image: url('../images/gifs/bank.gif');
+    background-position: 0px 0px;
+}
+#game-pif, #game-pif:hover{
+    position: absolute;
+    background-position: -507px -786px; 
+    width: 231px;
+    height: 217px;
+    bottom: 100px;
+    right: 190px;
+}
+#game-pif:hover{
+    background-image: url('../images/gifs/pif.gif');
+    background-position: 0px 0px;
+}
+#game-insure, #game-insure:hover{
+     position: absolute;
+     background-position: -739px -926px; 
+     width: 163px; 
+     height: 234px;
+     top: 30px;
+     left: 200px;
+}
+#game-insure:hover{
+    background-image: url('../images/gifs/insure.gif');
+    background-position: 0px 0px;
+}
+#game-found, #game-found:hover{
+    position: absolute;
+    background-position: -275px -786px; 
+    width: 231px;
+    height: 199px;
+    top: 145px;
+    left: 440px;
+}
+#game-found:hover{
+    background-image: url('../images/gifs/found.gif');
+    background-position: 0px 0px;
+}
+#game-trailer, #game-trailer:hover{
+    position: absolute;
+    background-position: -667px -566px; 
+    width: 332px; 
+    height: 219px;
+    bottom: 90px;
+    left: 180px;
+}
+#game-trailer:hover{
+    background: url('../images/gifs/trailer.gif') no-repeat;
+    background-position: 0px 0px;
 }
 .tooltip
 {
-    margin: 10px auto;
+    margin: 5px auto;
     background: #fff;
-    padding: 10px;
+    padding: 5px;
     border: 3px #ccc solid;
     border-radius: 5px;
     z-index: 10;
     position: absolute;
-    top: 20px;
+    /*top: -40px;*/
 }
 .has-tooltip
 {
@@ -77,17 +170,22 @@
 .game-link a{
     display: block;
     width: 100%;
-}
-#game-house .game-link a{
-    height: 206px;
     text-indent: -9999px;
+}
+#game-oldcar .game-link a{
+    height: 56px;
+}
+#game-suit .game-link a, #game-expensive-suit .game-link a{
+    height: 26px;
+}
+#game-house .game-link a, #game-trailer .game-link a, #game-cottage .game-link a{
+    height: 219px;
 }
 #game-bank .game-link a{
-    height: 194px;
-    text-indent: -9999px;
+    height: 178px;
 }
 #game-shop .game-link a{
-    height: 210px;
+    height: 139px;
     text-indent: -9999px;
 }
 #game-insure .game-link a{
@@ -136,7 +234,7 @@
     background-color: #fff;
 }
 #game-manual, #game-tips, #game-news, #game-events{
-    opacity: 0.8;
+    opacity: 0.5;
 }
 #game-manual{
      top: 10px;
@@ -145,6 +243,7 @@
 #game-tips{
     top: 50px;
     left: 10px;
+    z-index: 999;
 }
 #game-news, #game-events{
     position: absolute;
@@ -153,6 +252,7 @@
     height: 100px;
     border-radius: 5px;
     border: 3px #ccc solid;
+    z-index: 100;
 }
 #game-news{
     top: 10px;
@@ -181,17 +281,20 @@
     background-color: #fff;
     display: none;
     position: absolute;
-    z-index: 10;
-    top: 10%;
-    left: 10%;
+    z-index: 10000;
+    top: 15%;
+    left: 170px;
     padding: 5px;
     border: 3px #ccc solid;
     border-radius: 5px;
+    width: auto;
+    max-width: 600px;
+    max-height: 500px;
+    min-width: 600px;
 }
 #game-popup-content{
-    max-height: 500px;
     overflow-y: auto; 
-    max-width: 600px;
+    max-height: 500px
 }
 #game-layout-overlay
 {
@@ -205,17 +308,17 @@
     z-index: 9;
     opacity: 0.3;
 }
-.popup-buttons{
-    padding: 5px;
-}
-#popup-close-button{
+#popup-close-button, .alt-close-button{
     width: 20px;
     height: 21px;
     text-indent: -9999px;
     cursor: pointer;
     color: #fff;
     background: url('../images/interface_parts/button_close.png') no-repeat;
-    float: right;
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    
 }
 .negative{
     color: #C00;
@@ -229,4 +332,77 @@
     background: url('../images/interface_parts/button_next.png') no-repeat;
     width: 39px;
     height: 68px;
+}
+#game-loader{
+    width: 80px;
+    height: 63px;
+    background-image: url('../images/loader.gif');
+    display: none;
+    position: absolute;
+    left: 450px;
+    top: 400px;
+}
+.game-little-star{
+    display: inline-block;
+    width: 31px;
+    height: 30px;
+    background-image: url('../images/interface_parts/unlevel.png');
+}
+.game-level-star{
+    display: inline-block;
+    width: 41px;
+    height: 41px;
+    background-image: url('../images/interface_parts/level.png');
+}
+.game-form-textfield[readonly="readonly"]{
+    background-color: #fff;
+    border:0;
+    color:#f6931f;
+    font-weight:bold;
+}
+a.game-tool-button{
+    display: inline-block;
+    padding: 5px;
+    background-color: #FF4136;
+    border: 1px solid #DDD;
+    border-radius: 5px;
+    color: #fff;
+    text-decoration: none;
+}
+a.game-tool-button:hover{
+    background-color: #DB1E13;
+    color: #FFF;
+}
+.game-button-panel{
+    text-align: right;
+    clear: both;
+}
+.tool-note-detail{
+    font-size: 10px;
+}
+.game-panel-block{
+    width: 130px;
+    float: left;
+    text-align: center;
+    vertical-align: center;
+    padding-top: 5px;
+}
+.game-panel-block-stars{
+   width: 250px;
+}
+.game-panel-block-name{
+    font-size: 12px;
+}
+.game-panel-block-avatar{
+    width: 80px;
+}
+.game-tips{
+    padding: 10px;
+}
+.game-tip-description{
+    padding: 10px;
+    font-size: 13px;
+}
+.tool-description{
+    padding: 10px 10px;
 }

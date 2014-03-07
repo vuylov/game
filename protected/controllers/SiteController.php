@@ -20,6 +20,21 @@ class SiteController extends Controller
 			),
 		);
 	}
+        
+        public function actionRanking()
+        {
+            $gameDataProvider  = new CActiveDataProvider('Game', array(
+                'criteria' => array(
+                    'condition' => 'status = 0',
+                    'order'     => 'scores DESC',
+                    'with'      => array('user')
+                ),
+                'pagination' => array(
+                    'pageSize'  => 10,
+                ),
+            ));
+            $this->render('ranking', array('dataProvider' => $gameDataProvider));
+        }
 
 	/**
 	 * This is the default 'index' action that is invoked
@@ -107,5 +122,10 @@ class SiteController extends Controller
                 
             }
             $this->render('registration', array('user'=>$user));
+        }
+        
+        public function actionForgetPassword()
+        {
+            
         }
 }
