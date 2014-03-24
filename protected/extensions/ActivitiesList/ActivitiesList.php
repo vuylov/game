@@ -11,9 +11,11 @@ class ActivitiesList extends CWidget {
         $activities = Action::model()->with(array(
             'worthInsures',
             'worth' => array(
-                'with' => array('costs')
+                'alias'=> 'w',
+                'with' => array('costs'),
+                'order'=>'w.price_buy'
             )
         ))->findAllByAttributes(array('game_id' => $step->game_id, 'status' => 'b'));
-        $this->render('list', array('activities' => $activities));
+        $this->render('list', array('activities' => $activities, 'progress' => $this->step));
     }
 }

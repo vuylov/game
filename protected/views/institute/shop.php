@@ -1,8 +1,7 @@
-<div>
-    <table>
-        <tr>
-            <td>Изображение</td>
-            <td>Наименование</td>
+<table>
+        <tr class="caption">
+            <td>Ценность</td>
+            <!--<td>&nbsp;</td>-->
             <td>Цена покупки</td>
             <td>Цена продажи</td>
             <td>Уровень престижа</td>
@@ -12,8 +11,8 @@
         </tr>
 <?php foreach($worthes as $worth): ?>
         <tr>
-            <td><img src="<?php echo $worth->image; ?>"</td>
-            <td><?php echo $worth->name; ?></td>
+            <td><span class="<?php echo $worth->css; ?>"></span></td>
+            <!--<td><?php echo $worth->name; ?></td>-->
             <td><?php echo $worth->price_buy; ?></td>
             <td><?php echo $worth->price_sell; ?></td>
             <td><?php echo $worth->prestige; ?></td>
@@ -32,11 +31,12 @@
                     array(
                         'success'=>'function(response){$("#game-popup-content").html(response);}',
                         ),
-                    //array('class'=>'buy'),
-                    array('id' => mt_rand(1, 10000))
+                    array(
+                        'id'    => mt_rand(1, 10000),
+                        'class' => 'game-green-button'
+                        )
                     ); ?>
             </td>
         </tr>
 <?php endforeach; ?>
     </table>
-</div>

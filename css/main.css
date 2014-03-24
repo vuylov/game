@@ -4,13 +4,14 @@ body
 	padding: 0;
 	color: #555;
 	font: normal 10pt Arial,Helvetica,sans-serif;
-	background: #EFEFEF;
+	background: #5db3ff url('../images/bg_c.png') center no-repeat;
+        background-attachment: fixed;
+        
 }
 
-#page
-{
-	background: white;
-	border: 1px solid #C9E0ED;
+#page{
+    margin-top: 5px;
+    background: white;
 }
 
 #header
@@ -22,7 +23,7 @@ body
 
 #content
 {
-    padding: 2px;
+    padding: 0px;
 }
 
 #sidebar
@@ -32,11 +33,12 @@ body
 
 #footer
 {
+        width: 980px;
+        margin: 10px auto !important;
+        background: rgba(255, 255, 255, 0.6);
 	padding: 10px;
-	margin: 10px 20px;
 	font-size: 0.8em;
 	text-align: center;
-	border-top: 1px solid #C9E0ED;
 }
 
 #logo
@@ -300,4 +302,10 @@ img.avatar
     font-size: 14px;
     color: #FF4136;
     
+}
+.game-tester-note p, .game-tester-note ul{
+    text-align: left;
+}
+.tester-word{
+    font-weight: bold;
 }

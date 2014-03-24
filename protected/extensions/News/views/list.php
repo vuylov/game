@@ -8,11 +8,12 @@
                                 'success'=>'function(response){
                                             $("#game-layout-overlay").fadeIn("fast");
                                             $("#game-popup").removeClass().addClass("popup-news");
+                                            $("#game-popup-header").text("Новость");
                                             $("#game-popup-content").html(response);
                                             $("#game-popup").fadeIn("fast");}'),
                             array(
                                 'id' => mt_rand(1, 10000)));?>
-            <?php echo '. Новость возникла на '.$current->progress->step.' ходе. Событие может возникнуть на '.$current->event_start.' ходе'; ?>
+            <?php //echo '. Новость возникла на '.$current->progress->step.' ходе. Событие может возникнуть на '.$current->event_start.' ходе'; ?>
         </li>
     <?php endforeach; ?>
     </ul>

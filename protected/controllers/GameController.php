@@ -10,6 +10,22 @@ class GameController extends SecureController
             echo $response;
         }
         
+        public function actionEnd()
+        {
+            $user   = Yii::app()->user->getState('id');
+            $id     = (int)Yii::app()->request->getQuery('id');
+            $game   = Game::model()->findByAttributes(array('user_id' => $user, 'id' => $id));
+            if(!$game)
+            {
+                $this->redirect(array('site/login'));
+                Yii::app()->end();
+            }
+            $progress = Progress::model()->findByAttributes(array('game_id'=>$id), array('order' => 'date_making DESC' ));
+            $game->endGame($progress, Game::$WIN);
+            
+            $this->redirect(array('game/list'));
+        }
+        
         public function actionIndex()
 	{
 		$this->render('index');
@@ -18,7 +34,11 @@ class GameController extends SecureController
         public function actionList()
         {
             $userId = Yii::app()->user->getState('id');
-            $games = Game::model()->findAll('user_id = :id AND status = :status', array(':id'=>$userId, ':status'=> 1));
+            $games = Game::model()->findAll(array(
+                'condition' => 'user_id = :id',
+                'params'    => array(':id'=>$userId),
+                'order'     => 'status DESC'
+            ));
             if(!$games)
             {
                 $this->render('create');
@@ -138,9 +158,6 @@ class GameController extends SecureController
                 var_dump($newStep->getErrors());
             }
             
-            //generate rates for financinal tools
-            ShareRateManager::newRates($newStep);
-            
             //check assets list for process finance tools
             $this->checkAssetList($newStep);
             //check dates of insure worthes
@@ -191,11 +208,16 @@ class GameController extends SecureController
             
             //calculate income without credit payment
             $newStep->deposit += ProgressIncome::getStepProgressIncome($newStep);
+            
+            //generate rates for financinal tools
+            ShareRateManager::newRates($newStep);
+            
             //save all changes in DB
             $newStep->save();
                 /*
              * Stop integratig event model
              */
+            
             
             $response = $this->renderPartial('play', array('step'=>$newStep), true, true);
             echo $response;

@@ -207,7 +207,7 @@
 #game-panel{
     position: absolute;
     width: 100%;
-    height: 125px;
+    height: 140px;
     bottom: 0px;
     font-family: Verdana, sans-serif;
     font-size: 12px;
@@ -215,23 +215,23 @@
 #game-manual, #game-tips{
     position: absolute;
     background-color: #202020;
-    width: 150px;
-    border: 3px #ccc solid;
-    border-radius: 5px;
+    width: 160px;
+    height: 38px;
     color: #fff;
     font-weight: bold;
+}
+#game-manual{
+    background: url('../images/manual.png') no-repeat;
+}
+#game-tips{
+    background: url('../images/tips.png') no-repeat;
 }
 #game-manual a, #game-tips a{
     padding: 5px;
     text-decoration: none;
     display: block;
     color: #fff;
-    
-}
-#game-manual a:hover, #game-tips a:hover{
-    text-decoration: none;
-    color: #202020;
-    background-color: #fff;
+    text-indent: -9999px;
 }
 #game-manual, #game-tips, #game-news, #game-events{
     opacity: 0.5;
@@ -243,15 +243,12 @@
 #game-tips{
     top: 50px;
     left: 10px;
-    z-index: 999;
+    z-index: 100;
 }
 #game-news, #game-events{
     position: absolute;
-    background-color: rgb(255, 255, 255);
     width: 350px;
     height: 100px;
-    border-radius: 5px;
-    border: 3px #ccc solid;
     z-index: 100;
 }
 #game-news{
@@ -265,36 +262,71 @@
     
 }
 .game-event-header, .game-news-header{
-    padding: 2px;
-    background-color: #202020;
     color: #fff;
     font-weight: bold;
-    border-radius: 0px 0px 5px 5px;
+    display: block;
+	width: 351px;
+    height: 38px;
+	text-indent: -9999px;
+}
+.game-news-header{
+	background: url('../images/news_header.png') no-repeat;
+}
+.game-event-header{
+    background: url('../images/events_header.png') no-repeat;
 }
 .game-event-body, .game-news-body{
+    width: 339px;
+	margin-top: 0px;
+	margin-left: 4px;
     padding: 2px;
     overflow-y: auto;
     font-size: 10px;
     height: 78px;
+    background-color: #a3d8a2;
+    border-radius: 0px 0px 5px 5px;
+}
+.game-news-bg{
+    background: #fff url('../images/kp_bg.png') bottom fixed;
+    height: 350px;
+    position: relative;
+}
+.game-news-inner-content{
+    margin: 0 auto;
+    width: 300px;
+    height: 300px;
+    background-color: #fff;
+    padding: 5px;
+    font-weight: bolder;
 }
 #game-popup{
-    background-color: #fff;
     display: none;
     position: absolute;
     z-index: 10000;
-    top: 15%;
+    top: 13%;
     left: 170px;
-    padding: 5px;
-    border: 3px #ccc solid;
-    border-radius: 5px;
     width: auto;
     max-width: 600px;
     max-height: 500px;
     min-width: 600px;
+    margin: 0 auto;
+}
+#game-popup-header{
+    text-align: center;
+    background: url('../images/header_popup_c.png') no-repeat;
+    height: 31px;
+    font-weight: bold;
+    color: #fff;
+    line-height: 28px;
 }
 #game-popup-content{
-    overflow-y: auto; 
-    max-height: 500px
+    background-color: #fff;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 500px;
+    max-width: 580px;
+    margin: 0 auto;
+    padding: 5px;
 }
 #game-layout-overlay
 {
@@ -305,7 +337,7 @@
     width: 100%;
     height: 100%;
     display: none;
-    z-index: 9;
+    z-index: 9999;
     opacity: 0.3;
 }
 #popup-close-button, .alt-close-button{
@@ -316,8 +348,8 @@
     color: #fff;
     background: url('../images/interface_parts/button_close.png') no-repeat;
     position: absolute;
-    right: -10px;
-    top: -10px;
+    right: -5px;
+    top: -5px;
     
 }
 .negative{
@@ -326,7 +358,7 @@
 .positive{
     color: #76C376;
 }
-.next{
+.game-next{
     display: block;
     text-indent: -9999px;
     background: url('../images/interface_parts/button_next.png') no-repeat;
@@ -341,17 +373,18 @@
     position: absolute;
     left: 450px;
     top: 400px;
+    z-index: 1999;
 }
 .game-little-star{
     display: inline-block;
-    width: 31px;
-    height: 30px;
+    width: 30px;
+    height: 29px;
     background-image: url('../images/interface_parts/unlevel.png');
 }
 .game-level-star{
     display: inline-block;
-    width: 41px;
-    height: 41px;
+    width: 40px;
+    height: 40px;
     background-image: url('../images/interface_parts/level.png');
 }
 .game-form-textfield[readonly="readonly"]{
@@ -363,6 +396,7 @@
 a.game-tool-button{
     display: inline-block;
     padding: 5px;
+    margin: 5px;
     background-color: #FF4136;
     border: 1px solid #DDD;
     border-radius: 5px;
@@ -405,4 +439,50 @@ a.game-tool-button:hover{
 }
 .tool-description{
     padding: 10px 10px;
+}
+.suit, .cottage, .expensive-suit, .helicopter, .newcar, 
+.oldcar, .house, .yacht
+{ display: block; background: url('../images/shop_sprite_c.png') no-repeat;box-shadow: 0 0 10px rgba(0,0,0,0.5); position:relative;}
+
+.yacht{background-position: -72px -213px; width: 70px; height: 70px;}
+.house{background-position: -1px -213px; width: 70px; height: 70px;}
+.suit{background-position: -1px -0px; width: 70px; height: 70px;}
+.expensive-suit{background-position: -1px -71px; width: 70px; height: 70px;}
+.newcar{background-position: -1px -142px; width: 70px; height: 70px;}
+.oldcar{background-position: -72px -142px; width: 70px; height: 70px;}
+.cottage{background-position: -72px -0px; width: 70px; height: 70px;}
+.helicopter{background-position: -72px -71px; width: 70px; height: 70px;}
+
+.lock{
+    display: block;
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    right: 0px;
+    background: url('../images/lock.png') no-repeat;
+}
+table tr.caption{
+    background-color: #ececec; 
+}
+table tr.caption td{
+    text-align: center;
+    font-weight:700;
+}
+table tr.caption td:first-child{
+    width: 100px;
+}
+table tr td {
+    text-align: center;
+}
+a.game-green-button{
+    display: inline-table;
+    width: 75px;
+    height: 27px;
+    background: url('../images/button.png') no-repeat;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 27px;
 }

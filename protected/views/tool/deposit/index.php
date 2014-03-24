@@ -1,3 +1,8 @@
+<?php if((int)$step->deposit === 0): ?>
+<div>
+    У вас недостаточно средств для использования инструмента "Депозит"
+</div>
+<?php else:?>
 <div class="form-process">
 <?php echo CHtml::beginForm('', 'post', array('id'=>'dep_')); ?>
     <div class="row tool-description">
@@ -61,5 +66,6 @@
     <?php echo CHtml::hiddenField('Tool[id]', $tool->id); ?>
 <?php echo CHtml::endForm(); ?>
 </div>
+<?php endif;?>
 
     

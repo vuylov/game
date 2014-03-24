@@ -3,13 +3,13 @@
         <div class="game-panel-block game-panel-block-avatar">
             <img src="<?php echo Yii::app()->baseUrl.'/images/avatar.png' ?>">
         </div>
-        <div class="game-panel-block"><span class="game-panel-block-name">ХОД</span><br><?php echo $step->step; ?></div>
-        <div class="game-panel-block"><span class="game-panel-block-name">НАЛИЧНЫЕ</span><br><?php echo $step->deposit; ?></div>
-        <div class="game-panel-block"><span class="game-panel-block-name">ЕЖЕХОДНЫЙ ДОХОД</span><br><?php echo ProgressIncome::getStepProgressIncome($step, true);?></div>
-        <div class="game-panel-block"><span class="game-panel-block-name">
+        <div class="game-panel-block"><span id="game-panel-step" class="game-panel-block-name">ХОД</span><br><?php echo $step->step; ?></div>
+        <div class="game-panel-block"><span id="game-panel-money" class="game-panel-block-name">НАЛИЧНЫЕ</span><br><?php echo $step->deposit; ?></div>
+        <div class="game-panel-block"><span id="game-panel-money-step" class="game-panel-block-name">ЕЖЕХОДНЫЙ ДОХОД</span><br><?php echo ProgressIncome::getStepProgressIncome($step, true);?></div>
+        <div class="game-panel-block"><span id="game-prestige" class="game-panel-block-name">
             ПРЕСТИЖ</span><br><?php echo $step->prestige; ?>
         </div>
-        <div class="game-panel-block game-panel-block-stars"><span class="game-panel-block-name">
+        <div class="game-panel-block game-panel-block-stars"><span id="game-level-stars" class="game-panel-block-name">
             УРОВЕНЬ<br></span><?php $this->widget('ext.Levels.GameLevel', array(
                 'step' => $step,
             )); ?>
@@ -29,7 +29,7 @@
                     ),
                     array(
                         'id'        => mt_rand(1, 9999),
-                        'class'     => 'next',
+                        'class'     => 'game-next',
                         'active'    => 'enabled',  
                         )
                 ); ?>
@@ -60,7 +60,8 @@ $this->beginWidget('zii.widgets.jui.CJuiDialog',array(
 <?php $this->endWidget('zii.widgets.jui.CJuiDialog');
 ?>
     <div id="game-popup">
-            <div id="popup-close-button">Закрыть</div>
+        <div id="popup-close-button">Закрыть</div>
+        <div id="game-popup-header"></div>
         <div id="game-popup-content"></div>
     </div>
     <div id="game-layout-overlay"></div>

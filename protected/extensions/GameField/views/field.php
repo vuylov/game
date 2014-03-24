@@ -7,6 +7,7 @@
                             'success'=>'function(response){'
                             .'$("#game-layout-overlay").fadeIn("fast");'
                             . '$("#game-popup").addClass("popup-shop");'
+                            .'$("#game-popup-header").text("Магазин");'
                             . '$("#game-popup-content").html(response);'
                             . '$("#game-popup").fadeIn("fast"); return false;}'
                         ),
@@ -14,7 +15,7 @@
                     );?>
         </div>
         <div class="tooltip">
-            Универсам
+            Магазин
         </div>
     </div>
     <?php if(is_array($institutes)): ?>
@@ -35,7 +36,7 @@
     ?>
     <div id="game-panel">
         <div id="game-manual">
-            <a href="#" target="_blank">Руководство</a>
+            <a id="game-guide" href="#" target="_blank">Руководство</a>
         </div>
         <div id="game-tips">
             <a href="#">Подсказки</a>
@@ -54,7 +55,6 @@
         </div>
     </div>
 </div>
-<?php //Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl.'/js/game.js');?>
 <?php
     $script = '$(document).ready(function(){
         $(".tooltip").hide();
@@ -94,6 +94,7 @@
                 success: function(response){
                         $("#game-layout-overlay").fadeIn("fast");
                         $("#game-popup").removeClass().addClass("popup-home");
+                        $("#game-popup-header").text("Активы / Пассивы");
                         $("#game-popup-content").html(response);
                         $("#game-popup").fadeIn("fast");},
                 error: function(xhr){alert("failure"+xhr.readyState+this.url)}
@@ -108,6 +109,7 @@
                 success: function(response){
                         $("#game-layout-overlay").fadeIn("fast");
                         $("#game-popup").removeClass().addClass("popup-tip");
+                        $("#game-popup-header").text("Подсказка");
                         $("#game-popup-content").html(response);
                         $("#game-popup").fadeIn("fast");},
                 error: function(xhr){alert("failure"+xhr.readyState+this.url)}
@@ -122,6 +124,7 @@
                 success: function(response){
                         $("#game-layout-overlay").fadeIn("fast");
                         $("#game-popup").removeClass().addClass("popup-bank");
+                        $("#game-popup-header").text("Банк");
                         $("#game-popup-content").html(response);
                         $("#game-popup").fadeIn("fast");},
                 error: function(xhr){alert("failure"+xhr.readyState+this.url)}
@@ -136,6 +139,7 @@
                 success: function(response){
                         $("#game-layout-overlay").fadeIn("fast");
                         $("#game-popup").removeClass().addClass("popup-insure");
+                        $("#game-popup-header").text("Страховая компания");
                         $("#game-popup-content").html(response);
                         $("#game-popup").fadeIn("fast");},
                 error: function(xhr){alert("failure"+xhr.readyState+this.url)}
@@ -150,6 +154,7 @@
                 success: function(response){
                         $("#game-layout-overlay").fadeIn("fast");
                         $("#game-popup").removeClass().addClass("popup-pif");
+                        $("#game-popup-header").text("Паевый инвестиционный фонд");
                         $("#game-popup-content").html(response);
                         $("#game-popup").fadeIn("fast");},
                 error: function(xhr){alert("failure"+xhr.readyState+this.url)}
@@ -164,6 +169,7 @@
                 success: function(response){
                         $("#game-layout-overlay").fadeIn("fast");
                         $("#game-popup").removeClass().addClass("popup-found");
+                        $("#game-popup-header").text("Фондовая биржа");
                         $("#game-popup-content").html(response);
                         $("#game-popup").fadeIn("fast");},
                 error: function(xhr){alert("failure"+xhr.readyState+this.url)}

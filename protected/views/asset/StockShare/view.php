@@ -10,7 +10,7 @@
         Текущая стоимость акции: <?php echo ShareRateManager::getLastRate($asset->tool_id, $progress); ?>
     </div>
     <div class="row">
-        Обща стоимость: <?php echo $asset->balance_end; ?>
+        Общая стоимость: <?php echo $asset->balance_end; ?>
     </div>
     <div class="row">
         <?php echo CHtml::label('Укажите количество акций для продажи', 'amount_basic'); ?>

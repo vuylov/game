@@ -1,6 +1,6 @@
 <?php
 /*
- * Check vlue of level. Compare with prestige table
+ * Check value of level. Compare with prestige table
  * Increase level
  */
 class GameLevel extends CWidget {
@@ -9,24 +9,14 @@ class GameLevel extends CWidget {
         define("VIDEO_NAME", 2); // 2 index in params array in levels
         $step   = $this->step;
         $levels = Yii::app()->params['levels'];
-        $isLevelUp = FALSE;
+        $video      = FALSE;
+        $isGameStart= FALSE;
+        $isLevelUp  = FALSE;
+        $isGameWin  = FALSE;
+        $isGameFail = FALSE;
+        $currentLevel = 0;
         
-        if($step->deposit < 0)//failed
-        {
-            $game           = Game::model()->findByPk($step->game_id);
-            $game->endGame($step, Game::$FAILED);
-            $video          = Yii::app()->params['video_game_over'];
-            $response = $this->render('endGame', array('video'=> $video, 'level' => 0), true);
-            echo $response;
-        }
-        elseif($step->prestige >=164001)
-        {
-            $game           = Game::model()->findByPk($step->game_id);
-            $game->endGame($step, Game::$WIN);
-            $video          = Yii::app()->params['levels'][5][VIDEO_NAME];
-            $response = $this->render('endGame', array('video'=> $video, 'level' => 5), true);
-            echo $response;
-        }
+        //Get current value of game level. Value take from main configuration
         foreach ($levels as $prestigeLevel => $rangeLevel)
         {
             if($step->prestige > $rangeLevel[0] && $step->prestige < $rangeLevel[1])
@@ -35,7 +25,7 @@ class GameLevel extends CWidget {
                 break;
             }
         }
-        
+        //Get stired value of game level
         $dbLevel  = Yii::app()->db->createCommand()
                 ->select('id, max(value) as lev')
                 ->from('level')
@@ -43,7 +33,7 @@ class GameLevel extends CWidget {
                 ->queryRow(true);  
         
         
-        if($dbLevel['lev'] !== '0' && !$dbLevel['lev']){ // level 0
+        if($dbLevel['lev'] !== '0' && !$dbLevel['lev']){ // Start game. Level 0.
             $newlevel              = new Level;
             $newlevel->game_id     = $step->game_id;
             $newlevel->progress_id = $step->id;
@@ -51,7 +41,8 @@ class GameLevel extends CWidget {
             $newlevel->save();
             
             $level                  = $newlevel->value;
-            $isLevelUp = TRUE;
+            $isLevelUp  = TRUE;
+            $isGameStart= TRUE;
             $video = Yii::app()->params['levels'][$level][VIDEO_NAME];
         }
         else{
@@ -61,7 +52,7 @@ class GameLevel extends CWidget {
                 $level  = $dbLevel['lev'];
                 $video = FALSE;
             }
-            elseif((int)$currentLevel < (int)$dbLevel['lev']){//case: user sold worth -> prestege decreased
+            elseif((int)$currentLevel < (int)$dbLevel['lev']){//case: user sold worth -> prestige decreased
                 $level  = $dbLevel['lev'];
                 $video = FALSE;
             }
@@ -75,10 +66,27 @@ class GameLevel extends CWidget {
                 $level  = $currentLevel;
                 $isLevelUp   = TRUE;
                 $video = Yii::app()->params['levels'][$level][VIDEO_NAME];
-            }
+            } 
         }
-               
-        $response = $this->render('index', array('level' => $level, 'up'=>$isLevelUp, 'video'=> $video), true);
+        if($step->deposit < 0)//Game failed an over
+            {
+                $game           = Game::model()->findByPk($step->game_id);
+                $game->endGame($step, Game::$FAILED);
+                $video          = Yii::app()->params['video_game_over'];
+                $isGameFail     = TRUE;
+                //$response = $this->render('endGame', array('video'=> $video, 'level' => 0), true);
+                //echo $response;
+            }
+            elseif($step->prestige >=164001) //Game win and over
+            {
+                $game           = Game::model()->findByPk($step->game_id);
+                $game->endGame($step, Game::$WIN);
+                $video          = Yii::app()->params['levels'][5][VIDEO_NAME];
+                $isGameWin      = TRUE;
+                //$response = $this->render('endGame', array('video'=> $video, 'level' => 5), true);
+                //echo $response;
+            }
+        $response = $this->render('index', array('level' => $level, 'up'=>$isLevelUp, 'fail' => $isGameFail, 'win' => $isGameWin, 'start'=> $isGameStart,'video'=> $video), true);
         echo $response;
     }
 }

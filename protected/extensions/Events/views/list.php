@@ -9,6 +9,7 @@
                                 'success'=>'function(response){
                                             $("#game-layout-overlay").fadeIn("fast");
                                             $("#game-popup").removeClass().addClass("popup-news");
+                                            $("#game-popup-header").text("Событие");
                                             $("#game-popup-content").html(response);
                                             $("#game-popup").fadeIn("fast");}'),
                             array(

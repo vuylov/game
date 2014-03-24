@@ -1,6 +1,8 @@
 <?php
 //ini_set('session.cookie_domain', '.volsu.ru');
 // change the following paths if necessary
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 $yii=dirname(__FILE__).'/../framework/yii.php';
 $config=dirname(__FILE__).'/protected/config/main.php';
 

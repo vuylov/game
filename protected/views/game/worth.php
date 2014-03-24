@@ -1,6 +1,6 @@
 <div class="worth">
-    <img class="worth-img" src="<?php echo $action->worth->image; ?>" alt="<?php echo $action->worth->name; ?>">
-    <?php echo $action->worth->name; ?>
+    <span class="<?php echo $action->worth->css; ?>" style="float:left; margin-right: 5px"></span>
+    <?php //echo $action->worth->name; ?>
     <?php echo $action->worth->description; ?>
     <?php if($action->worthInsures): ?>
         <?php 

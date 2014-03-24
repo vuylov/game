@@ -54,11 +54,11 @@ return array(
 		// uncomment the following to use a MySQL database
 		*/
 		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=pfudb',
-			'emulatePrepare' => true,
-			'username' => 'root',
-			'password' => '',
-			'charset' => 'utf8',
+			'connectionString'  => 'mysql:host=localhost;dbname=pfudb',
+			'emulatePrepare'    => true,
+			'username'          => 'pfuusr',
+			'password'          => 'd89s3fs2SA',
+			'charset'           => 'utf8',
 		),
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
@@ -85,15 +85,15 @@ return array(
 	// using Yii::app()->params['paramName']
 	'params'=>array(
 		// this is used in contact page
-		'adminEmail'=>'webmaster@example.com',
-                'income'    => '1000000',
+		'adminEmail'=>'vuylov@gmail.com',
+                'income'    => '10000',
                 'prestige'  => '0',
                 'levels'    => array(
                     array(0, 1000, 'intro.mp4'),
-                    array(1001, 5000, 'level1.mp4'),
-                    array(5001, 20000, 'level2.mp4'),
-                    array(20001, 50000, 'level3.mp4'),
-                    array(50001, 163999, 'level4.mp4'),
+                    array(1001, 5000, 'level_1.mp4'),
+                    array(5001, 20000, 'level_2.mp4'),
+                    array(20001, 50000, 'level_3.mp4'),
+                    array(50001, 163999, 'level_4.mp4'),
                     array(164000, 200000, 'win.mp4'),
                 ),
                 'video_game_over' => 'fail.mp4',
